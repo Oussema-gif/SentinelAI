@@ -1,0 +1,21 @@
+# Core ML
+numpy
+pandas
+scikit-learn
+scipy
+joblib
+
+# Data / visualization
+matplotlib
+seaborn
+
+# API / validation support used later
+pydantic
+
+# Development / testing
+pytest
+pytest-cov
+jupyter
+
+# Code quality
+ruff

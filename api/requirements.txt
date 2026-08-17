@@ -1,0 +1,20 @@
+# API
+fastapi
+uvicorn[standard]
+pydantic
+
+# Database
+sqlalchemy
+psycopg[binary]
+alembic
+
+# Configuration
+pydantic-settings
+
+# Testing
+pytest
+pytest-cov
+httpx
+
+# Code quality
+ruff

@@ -1,0 +1,82 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env
+
+# =========================
+# Jupyter
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# Node
+# =========================
+node_modules/
+dist/
+.vite/
+
+# =========================
+# SentinelAI data
+# =========================
+ml/data/raw/*
+!ml/data/raw/.gitkeep
+
+ml/data/processed/*
+!ml/data/processed/.gitkeep
+
+# =========================
+# ML artifacts
+# =========================
+ml/models/*.joblib
+ml/models/*.pkl
+
+# =========================
+# Logs
+# =========================
+*.log
+logs/
+
+# =========================
+# IDE
+# =========================
+.idea/
+.vscode/
+*.iml
+
+# =========================
+# OS
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Environment / secrets
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Build / temporary
+# =========================
+tmp/
+temp/
+*.tmp
+
+# Python bytecode anywhere in repository
+__pycache__/
+*.py[cod]
