@@ -2,14 +2,18 @@
 fastapi
 uvicorn[standard]
 pydantic
+pydantic-settings
 
-# Database
+# ML runtime
+numpy
+scipy
+scikit-learn
+joblib
+
+# Database ecosystem
 sqlalchemy
 psycopg[binary]
 alembic
-
-# Configuration
-pydantic-settings
 
 # Testing
 pytest
