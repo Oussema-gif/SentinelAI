@@ -1,25 +1,32 @@
 from __future__ import annotations
 
-import sys
-from pathlib import Path
-
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import delete
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-ML_SRC = PROJECT_ROOT / "ml" / "src"
-
-if str(ML_SRC) not in sys.path:
-    sys.path.insert(0, str(ML_SRC))
-
-
+from api.app.db.models import ModelVersion, Prediction
+from api.app.db.session import SessionLocal
 from api.app.main import app
 
 
 @pytest.fixture
 def client():
+    session = SessionLocal()
+
+    session.execute(delete(Prediction))
+    session.execute(delete(ModelVersion))
+    session.commit()
+    session.close()
+
     with TestClient(app) as test_client:
         yield test_client
+
+    session = SessionLocal()
+
+    session.execute(delete(Prediction))
+    session.execute(delete(ModelVersion))
+    session.commit()
+    session.close()
 
 
 def test_health(client: TestClient) -> None:

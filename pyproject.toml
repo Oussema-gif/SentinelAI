@@ -14,3 +14,9 @@ extend-select = [
 ignore = [
     "B008",
 ]
+
+[tool.pytest.ini_options]
+pythonpath = [
+    "api",
+    "ml/src",
+]

@@ -1,24 +1,19 @@
-# API
 fastapi
 uvicorn[standard]
 pydantic
 pydantic-settings
 
-# ML runtime
 numpy
 scipy
-scikit-learn
-joblib
+scikit-learn==1.9.0
+joblib==1.5.3
 
-# Database ecosystem
-sqlalchemy
-psycopg[binary]
-alembic
+SQLAlchemy==2.0.51
+alembic==1.18.5
+psycopg[binary]==3.3.4
 
-# Testing
 pytest
 pytest-cov
 httpx
 
-# Code quality
 ruff

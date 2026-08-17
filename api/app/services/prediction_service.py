@@ -6,7 +6,10 @@ from pathlib import Path
 from typing import Any
 
 from sentinelai_ml.predict import PredictionResult, SentinelPredictor
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
+from api.app.db.models import ModelVersion
 from api.app.schemas.analytics import UsageAnalyticsResponse
 from api.app.schemas.model import ModelInfoResponse
 from api.app.schemas.prediction import (
@@ -15,24 +18,19 @@ from api.app.schemas.prediction import (
     PredictionHistoryResponse,
 )
 from api.app.services.prediction_repository import (
-    InMemoryPredictionRepository,
+    PostgreSQLPredictionRepository,
 )
-
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
-
-MODEL_VERSION = "sentinelai-sms-v1.0.0"
-
-METADATA_PATH = PROJECT_ROOT / "ml" / "models" / f"{MODEL_VERSION}.metadata.json"
 
 
 class PredictionService:
     def __init__(
         self,
         predictor: SentinelPredictor,
-        repository: InMemoryPredictionRepository,
+        session: Session,
     ) -> None:
         self._predictor = predictor
-        self._repository = repository
+        self._session = session
+        self._repository = PostgreSQLPredictionRepository(session)
 
     def predict(
         self,
@@ -44,7 +42,10 @@ class PredictionService:
             top_k=top_k,
         )
 
-        self._repository.save(result)
+        self._repository.save(
+            text,
+            result,
+        )
 
         return result
 
@@ -74,29 +75,32 @@ class PredictionService:
         )
 
     def model_info(self) -> ModelInfoResponse:
-        metadata = self._read_metadata()
+        active = self._active_model()
+
+        metrics = active.metrics
 
         return ModelInfoResponse(
-            model_version=metadata["model_version"],
-            model_type=metadata["model_type"],
-            hyperparameters=metadata["hyperparameters"],
-            preprocessing_version=metadata["preprocessing_version"],
-            dataset_sha256=metadata["dataset"]["sha256"],
-            training_date_utc=metadata["training_date_utc"],
-            cv_results=metadata["cv_results"],
-            final_test_metrics=metadata["final_test_metrics"],
-            calibration=metadata["calibration"],
+            model_version=active.version,
+            model_type=active.model_type,
+            hyperparameters=metrics["hyperparameters"],
+            preprocessing_version=("phase3-conservative-whitespace-v1"),
+            dataset_sha256=(self._dataset_sha256()),
+            training_date_utc=active.trained_at.isoformat(),
+            cv_results=metrics["cv_results"],
+            final_test_metrics=metrics["final_test_metrics"],
+            calibration=metrics["calibration"],
         )
 
     def model_analytics(self) -> dict[str, Any]:
-        metadata = self._read_metadata()
+        active = self._active_model()
+        metrics = active.metrics
 
         return {
-            "model_version": metadata["model_version"],
-            "model_type": metadata["model_type"],
-            "cv_results": metadata["cv_results"],
-            "final_test_metrics": metadata["final_test_metrics"],
-            "calibration": metadata["calibration"],
+            "model_version": active.version,
+            "model_type": active.model_type,
+            "cv_results": metrics["cv_results"],
+            "final_test_metrics": metrics["final_test_metrics"],
+            "calibration": metrics["calibration"],
         }
 
     def usage_analytics(self) -> UsageAnalyticsResponse:
@@ -110,6 +114,27 @@ class PredictionService:
             spam_predictions=spam,
             spam_rate=round(spam_rate, 6),
         )
+
+    def _active_model(self) -> ModelVersion:
+        model = self._session.scalar(
+            select(ModelVersion).where(ModelVersion.is_active.is_(True))
+        )
+
+        if model is None:
+            raise RuntimeError("No active SentinelAI model is registered.")
+
+        return model
+
+    @staticmethod
+    def _dataset_sha256() -> str:
+        project_root = Path(__file__).resolve().parents[3]
+        metadata_path = (
+            project_root / "ml" / "models" / "sentinelai-sms-v1.0.0.metadata.json"
+        )
+
+        metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+
+        return metadata["dataset"]["sha256"]
 
     @staticmethod
     def _history_item(item: Any) -> PredictionHistoryItem:
@@ -130,10 +155,3 @@ class PredictionService:
             model_version=item.result.model_version,
             created_at=item.created_at,
         )
-
-    @staticmethod
-    def _read_metadata() -> dict[str, Any]:
-        if not METADATA_PATH.exists():
-            raise FileNotFoundError(f"Model metadata not found: {METADATA_PATH}")
-
-        return json.loads(METADATA_PATH.read_text(encoding="utf-8"))

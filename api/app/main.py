@@ -1,40 +1,46 @@
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from sentinelai_ml.predict import load_predictor
 
+from api.app.db.session import SessionLocal, engine
 from api.app.routers.analytics import router as analytics_router
 from api.app.routers.model import router as model_router
 from api.app.routers.predictions import router as predictions_router
-from api.app.services.prediction_repository import (
-    InMemoryPredictionRepository,
+from api.app.services.model_version_service import register_active_model
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+MODEL_METADATA_PATH = (
+    PROJECT_ROOT / "ml" / "models" / "sentinelai-sms-v1.0.0.metadata.json"
 )
-from api.app.services.prediction_service import PredictionService
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     predictor = load_predictor()
 
-    repository = InMemoryPredictionRepository()
+    app.state.predictor = predictor
 
-    app.state.prediction_service = PredictionService(
-        predictor=predictor,
-        repository=repository,
-    )
+    with SessionLocal() as session:
+        register_active_model(
+            session,
+            MODEL_METADATA_PATH,
+        )
 
     yield
 
-    repository.clear()
+    engine.dispose()
 
 
 app = FastAPI(
     title="SentinelAI API",
     version="1.0.0",
-    description=("Message threat detection API for SentinelAI V1."),
+    description="Message threat detection API for SentinelAI V1.",
     lifespan=lifespan,
 )
 
@@ -56,13 +62,13 @@ app.add_middleware(
     tags=["system"],
 )
 def health(request: Request) -> dict[str, str]:
-    service = getattr(
+    predictor = getattr(
         request.app.state,
-        "prediction_service",
+        "predictor",
         None,
     )
 
-    return {"status": "ok" if service is not None else "degraded"}
+    return {"status": "ok" if predictor is not None else "degraded"}
 
 
 app.include_router(predictions_router)
