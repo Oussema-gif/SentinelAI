@@ -1,0 +1,87 @@
+{
+  "model_version": "sentinelai-sms-v1.0.0",
+  "dataset": {
+    "path": "ml/data/raw/SMSSpamCollection",
+    "sha256": "7d039a24a6083ed9ef0f806ebad56bbb976e3aeb8de05669173bfdc4996c239d",
+    "rows": 5574,
+    "ham": 4827,
+    "spam": 747,
+    "exact_duplicate_rows": 403,
+    "normalized_duplicate_rows": 415
+  },
+  "preprocessing_version": "phase3-conservative-whitespace-v1",
+  "model_type": "Linear SVM",
+  "hyperparameters": {
+    "classifier__C": 2.0,
+    "classifier__class_weight": "balanced"
+  },
+  "training_date_utc": "2026-08-17T20:52:53.530572+00:00",
+  "random_state": 42,
+  "cv": {
+    "strategy": "StratifiedGroupKFold",
+    "n_splits": 5,
+    "group_definition": "lowercase + whitespace normalization"
+  },
+  "development_rows": 4459,
+  "final_test_rows": 1115,
+  "cv_results": [
+    {
+      "model_family": "Linear SVM",
+      "best_params": {
+        "classifier__C": 2.0,
+        "classifier__class_weight": "balanced"
+      },
+      "mean_precision": 0.9759,
+      "mean_recall": 0.924636,
+      "mean_f1": 0.949272,
+      "mean_pr_auc": 0.98199,
+      "std_f1": 0.007314,
+      "cv_score": 0.949272
+    },
+    {
+      "model_family": "Logistic Regression",
+      "best_params": {
+        "classifier__C": 2.0,
+        "classifier__class_weight": "balanced"
+      },
+      "mean_precision": 0.947588,
+      "mean_recall": 0.936387,
+      "mean_f1": 0.941896,
+      "mean_pr_auc": 0.978554,
+      "std_f1": 0.010294,
+      "cv_score": 0.941896
+    },
+    {
+      "model_family": "Multinomial Naive Bayes",
+      "best_params": {
+        "classifier__alpha": 0.1
+      },
+      "mean_precision": 0.983823,
+      "mean_recall": 0.896246,
+      "mean_f1": 0.937605,
+      "mean_pr_auc": 0.978792,
+      "std_f1": 0.014893,
+      "cv_score": 0.937605
+    }
+  ],
+  "final_test_metrics": {
+    "accuracy": 0.988341,
+    "precision": 1.0,
+    "recall": 0.913333,
+    "f1": 0.954704,
+    "pr_auc": 0.968298
+  },
+  "calibration": {
+    "available": false,
+    "approved": false,
+    "reason": "Selected classifier has no native predict_proba.",
+    "confidence_type": "decision_score_or_none"
+  },
+  "package_versions": {
+    "numpy": "2.5.2",
+    "pandas": "3.0.5",
+    "scikit-learn": "1.9.0",
+    "joblib": "1.5.3",
+    "python": "3.14.6"
+  }
+}

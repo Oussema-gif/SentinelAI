@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 3 — Preprocessing & Leak-Free Feature Pipeline
+Phase 4 — Model Training, Comparison & Selection
 
 ## Completed Phases
 
@@ -10,6 +10,7 @@ Phase 3 — Preprocessing & Leak-Free Feature Pipeline
 - Phase 1 — Dataset Acquisition & Validation — August 17, 2026
 - Phase 2 — Exploratory Data Analysis — August 17, 2026
 - Phase 3 — Preprocessing & Leak-Free Feature Pipeline — August 17, 2026
+- Phase 4 — Model Training, Comparison & Selection — August 17, 2026
 
 ## Key Decisions
 
@@ -51,7 +52,7 @@ Phase 3 — Preprocessing & Leak-Free Feature Pipeline
 
 ## Next Phase
 
-Phase 4 — Model Training, Comparison & Selection
+Phase 5 — Inference Contract & Explanation Layer
 
 ## Phase 1 Exit Gate
 
@@ -122,3 +123,46 @@ Phase 3 requires explicit approval from Oussema before implementation begins.
 ## Approval
 
 Phase 4 requires explicit approval from Oussema before implementation begins.
+
+
+## Phase 4 Model Selection
+
+- Selected model: Linear SVM
+- Hyperparameters:
+  - C: 2.0
+  - class_weight: balanced
+- CV F1: 0.949272
+- CV PR-AUC: 0.981990
+- Final held-out F1: 0.954704
+- Final held-out precision: 1.000000
+- Final held-out recall: 0.913333
+- Final held-out PR-AUC: 0.968298
+- Final holdout size: 1,115
+- Duplicate-group overlap: 0
+- Probability exposure: not approved; selected model has no native predict_proba
+
+## Phase 4 Exit Gate
+
+- [x] Final holdout isolated before model comparison
+- [x] Duplicate-aware holdout implemented
+- [x] Three model families compared
+- [x] Identical preprocessing used across candidates
+- [x] Stratified grouped 5-fold CV
+- [x] Precision reported
+- [x] Recall reported
+- [x] F1 reported
+- [x] PR-AUC reported
+- [x] Hyperparameter search performed
+- [x] Model selected from comparison table
+- [x] Final held-out test evaluated once
+- [x] Calibration audited
+- [x] Joblib artifact created
+- [x] Metadata sidecar created
+- [x] Model comparison report created
+- [x] Artifact load/predict smoke test passed
+- [x] Full ML test suite passes
+- [x] Ruff checks pass
+
+## Approval
+
+Phase 5 requires explicit approval from Oussema before implementation begins.
