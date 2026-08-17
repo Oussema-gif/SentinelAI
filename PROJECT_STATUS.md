@@ -259,3 +259,51 @@ These are non-failing warnings and are tracked for dependency consolidation.
 ## Approval
 
 Phase 7 requires explicit approval from Oussema before implementation begins.
+
+
+## Phase 6 API
+
+- API framework: FastAPI
+- Model initialization: application lifespan
+- Prediction endpoint: `POST /predictions`
+- Prediction history: `GET /predictions`
+- Health endpoint: `GET /health`
+- Model metadata: `GET /model/info`
+- Model analytics: `GET /analytics/model`
+- Usage analytics: `GET /analytics/usage`
+- Request validation: Pydantic
+- Whitespace-only messages rejected with HTTP 422
+- Prediction responses preserve honest confidence semantics
+- Inference logic remains in the Phase 5 inference layer
+- Repository boundary introduced for Phase 7 PostgreSQL replacement
+- Phase 6 persistence adapter: in-memory repository
+
+## Phase 6 Exit Gate
+
+- [x] FastAPI application boots successfully
+- [x] Model artifact loaded during application startup
+- [x] `GET /health` verified
+- [x] `POST /predictions` verified with real model
+- [x] `GET /predictions` verified
+- [x] `GET /model/info` verified
+- [x] `GET /analytics/model` implemented and tested
+- [x] `GET /analytics/usage` verified
+- [x] Pydantic request validation implemented
+- [x] Invalid/whitespace-only input returns HTTP 422
+- [x] Prediction history repository boundary implemented
+- [x] API tests pass
+- [x] ML tests pass
+- [x] Ruff checks pass
+- [x] HTTP smoke test passes
+
+## Known Dependency Warnings
+
+The current environments emit:
+- a Starlette/httpx TestClient deprecation warning
+- a joblib/NumPy 2.5 deprecation warning during artifact loading
+
+These are non-failing warnings and are tracked for dependency consolidation.
+
+## Approval
+
+Phase 7 requires explicit approval from Oussema before implementation begins.
