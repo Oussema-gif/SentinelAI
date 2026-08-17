@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 4 — Model Training, Comparison & Selection
+Phase 5 — Inference Contract & Explanation Layer
 
 ## Completed Phases
 
@@ -11,6 +11,7 @@ Phase 4 — Model Training, Comparison & Selection
 - Phase 2 — Exploratory Data Analysis — August 17, 2026
 - Phase 3 — Preprocessing & Leak-Free Feature Pipeline — August 17, 2026
 - Phase 4 — Model Training, Comparison & Selection — August 17, 2026
+- Phase 5 — Inference Contract & Explanation Layer — August 17, 2026
 
 ## Key Decisions
 
@@ -52,7 +53,7 @@ Phase 4 — Model Training, Comparison & Selection
 
 ## Next Phase
 
-Phase 5 — Inference Contract & Explanation Layer
+Phase 6 — FastAPI Service
 
 ## Phase 1 Exit Gate
 
@@ -166,3 +167,46 @@ Phase 4 requires explicit approval from Oussema before implementation begins.
 ## Approval
 
 Phase 5 requires explicit approval from Oussema before implementation begins.
+
+
+## Phase 5 Inference Contract
+
+- Prediction interface: `predict(text: str) -> PredictionResult`
+- Artifact loaded once through `SentinelPredictor`
+- Selected model: Linear SVM
+- Probability exposure: not approved
+- Confidence type: `decision_score_not_probability`
+- Decision score preserved separately from confidence
+- Influential terms derived from TF-IDF values multiplied by learned Linear SVM coefficients
+- Explanations contain direction (`ham` / `spam`) and deterministic contribution values
+- Empty messages rejected
+- Non-string input rejected
+- Zero-vocabulary-overlap behavior tested
+- Long-input behavior inherited from Phase 3 pipeline
+- Artifact load/predict regression test passes
+
+## Phase 5 Exit Gate
+
+- [x] Pure-Python inference contract implemented
+- [x] Production artifact loaded by inference layer
+- [x] PredictionResult implemented
+- [x] Honest confidence semantics implemented
+- [x] No uncalibrated probability exposed
+- [x] Linear-model explanation logic implemented
+- [x] Contributions derived from real model parameters
+- [x] Explanation output deterministic
+- [x] Empty input tested
+- [x] Invalid input type tested
+- [x] Real artifact smoke test passed
+- [x] Full ML test suite passes
+- [x] Ruff checks pass
+
+## Known Warning
+
+The real-artifact tests currently emit a NumPy 2.5 deprecation warning from the
+joblib loading path. Predictions remain correct and all tests pass. Dependency
+compatibility should be reviewed during the dependency/CI consolidation phase.
+
+## Approval
+
+Phase 6 requires explicit approval from Oussema before implementation begins.
