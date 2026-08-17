@@ -2,12 +2,13 @@
 
 ## Current Phase
 
-Phase 1 — Dataset Acquisition & Validation
+Phase 2 — Exploratory Data Analysis
 
 ## Completed Phases
 
 - Phase 0 — Environment & Repository Bootstrap — August 17, 2026
 - Phase 1 — Dataset Acquisition & Validation — August 17, 2026
+- Phase 2 — Exploratory Data Analysis — August 17, 2026
 
 ## Key Decisions
 
@@ -49,7 +50,7 @@ Phase 1 — Dataset Acquisition & Validation
 
 ## Next Phase
 
-Phase 2 — Exploratory Data Analysis
+Phase 3 — Preprocessing & Leak-Free Feature Pipeline
 
 ## Phase 1 Exit Gate
 
@@ -68,3 +69,24 @@ Phase 2 — Exploratory Data Analysis
 ## Approval
 
 Phase 2 requires explicit approval from Oussema before implementation begins.
+
+
+## Phase 2 Exit Gate
+
+- [x] Class balance analyzed
+- [x] Message length analyzed
+- [x] Raw token frequencies analyzed
+- [x] Exact duplicates analyzed
+- [x] Normalized duplicates analyzed
+- [x] Punctuation density analyzed
+- [x] Digit density analyzed
+- [x] Uppercase density analyzed
+- [x] Unicode usage analyzed
+- [x] Explicit preprocessing decisions documented
+- [x] EDA notebook saved
+- [x] EDA report saved
+- [x] Existing ML test suite passes
+
+## Approval
+
+Phase 3 requires explicit approval from Oussema before implementation begins.
