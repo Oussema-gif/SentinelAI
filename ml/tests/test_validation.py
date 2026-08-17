@@ -3,7 +3,6 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
-
 from sentinelai_ml.validation import (
     DatasetValidationError,
     validate_dataset,
@@ -20,9 +19,7 @@ def write_dataset(tmp_path: Path, content: str) -> Path:
 def test_valid_dataset(tmp_path: Path) -> None:
     path = write_dataset(
         tmp_path,
-        "ham\tHello there\n"
-        "spam\tWIN a free prize now\n"
-        "ham\tSee you tomorrow\n",
+        "ham\tHello there\nspam\tWIN a free prize now\nham\tSee you tomorrow\n",
     )
 
     report = validate_dataset(path)
@@ -51,8 +48,7 @@ def test_invalid_utf8_fails(tmp_path: Path) -> None:
 def test_malformed_row_without_tab_fails(tmp_path: Path) -> None:
     path = write_dataset(
         tmp_path,
-        "ham\tHello\n"
-        "spam This row is malformed\n",
+        "ham\tHello\nspam This row is malformed\n",
     )
 
     with pytest.raises(DatasetValidationError, match="Malformed"):
@@ -62,8 +58,7 @@ def test_malformed_row_without_tab_fails(tmp_path: Path) -> None:
 def test_unknown_label_fails(tmp_path: Path) -> None:
     path = write_dataset(
         tmp_path,
-        "ham\tHello\n"
-        "promotion\tBuy this product\n",
+        "ham\tHello\npromotion\tBuy this product\n",
     )
 
     with pytest.raises(DatasetValidationError, match="Unsupported label"):
@@ -73,8 +68,7 @@ def test_unknown_label_fails(tmp_path: Path) -> None:
 def test_empty_message_fails(tmp_path: Path) -> None:
     path = write_dataset(
         tmp_path,
-        "ham\tHello\n"
-        "spam\t   \n",
+        "ham\tHello\nspam\t   \n",
     )
 
     with pytest.raises(DatasetValidationError, match="empty message"):
@@ -84,9 +78,7 @@ def test_empty_message_fails(tmp_path: Path) -> None:
 def test_duplicate_rows_are_reported(tmp_path: Path) -> None:
     path = write_dataset(
         tmp_path,
-        "ham\tHello\n"
-        "spam\tWin money\n"
-        "ham\tHello\n",
+        "ham\tHello\nspam\tWin money\nham\tHello\n",
     )
 
     report = validate_dataset(path)
@@ -98,8 +90,7 @@ def test_duplicate_rows_are_reported(tmp_path: Path) -> None:
 def test_dataset_requires_both_classes(tmp_path: Path) -> None:
     path = write_dataset(
         tmp_path,
-        "ham\tHello\n"
-        "ham\tGood morning\n",
+        "ham\tHello\nham\tGood morning\n",
     )
 
     with pytest.raises(DatasetValidationError, match="both required labels"):
@@ -109,9 +100,7 @@ def test_dataset_requires_both_classes(tmp_path: Path) -> None:
 def test_message_statistics_are_computed(tmp_path: Path) -> None:
     path = write_dataset(
         tmp_path,
-        "ham\ta\n"
-        "spam\tabcd\n"
-        "ham\tabcdef\n",
+        "ham\ta\nspam\tabcd\nham\tabcdef\n",
     )
 
     report = validate_dataset(path)
@@ -125,8 +114,7 @@ def test_message_statistics_are_computed(tmp_path: Path) -> None:
 def test_report_can_be_written(tmp_path: Path) -> None:
     path = write_dataset(
         tmp_path,
-        "ham\tHello\n"
-        "spam\tWin now\n",
+        "ham\tHello\nspam\tWin now\n",
     )
 
     report = validate_dataset(path)

@@ -2,13 +2,14 @@
 
 ## Current Phase
 
-Phase 2 — Exploratory Data Analysis
+Phase 3 — Preprocessing & Leak-Free Feature Pipeline
 
 ## Completed Phases
 
 - Phase 0 — Environment & Repository Bootstrap — August 17, 2026
 - Phase 1 — Dataset Acquisition & Validation — August 17, 2026
 - Phase 2 — Exploratory Data Analysis — August 17, 2026
+- Phase 3 — Preprocessing & Leak-Free Feature Pipeline — August 17, 2026
 
 ## Key Decisions
 
@@ -50,7 +51,7 @@ Phase 2 — Exploratory Data Analysis
 
 ## Next Phase
 
-Phase 3 — Preprocessing & Leak-Free Feature Pipeline
+Phase 4 — Model Training, Comparison & Selection
 
 ## Phase 1 Exit Gate
 
@@ -90,3 +91,34 @@ Phase 2 requires explicit approval from Oussema before implementation begins.
 ## Approval
 
 Phase 3 requires explicit approval from Oussema before implementation begins.
+
+
+## Phase 3 Exit Gate
+
+- [x] Custom sklearn-compatible text transformer implemented
+- [x] Conservative preprocessing policy implemented from Phase 2
+- [x] TF-IDF contained inside the production Pipeline
+- [x] Classifier contained inside the production Pipeline
+- [x] Case information preserved
+- [x] Digits preserved
+- [x] Punctuation preserved
+- [x] Unicode preserved
+- [x] SMS abbreviations preserved
+- [x] URL-like content preserved
+- [x] Empty-string edge case tested
+- [x] Non-ASCII edge case tested
+- [x] Uppercase and digit preservation tested
+- [x] HTML-fragment edge case tested
+- [x] Very-long-input edge case tested
+- [x] Invalid input types rejected
+- [x] Pipeline end-to-end test passed
+- [x] Zero-vocabulary-overlap case tested
+- [x] Leakage-prevention regression test passed
+- [x] Deterministic prediction test passed
+- [x] Ruff checks passed
+- [x] Ruff formatting passed
+- [x] Full ML suite passes
+
+## Approval
+
+Phase 4 requires explicit approval from Oussema before implementation begins.

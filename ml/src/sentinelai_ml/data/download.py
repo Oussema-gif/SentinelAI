@@ -7,14 +7,10 @@ import urllib.request
 import zipfile
 from pathlib import Path
 
-
 PROJECT_ROOT = Path(__file__).resolve().parents[4]
 RAW_DIR = PROJECT_ROOT / "ml" / "data" / "raw"
 
-DATASET_URL = (
-    "https://archive.ics.uci.edu/static/public/228/"
-    "sms+spam+collection.zip"
-)
+DATASET_URL = "https://archive.ics.uci.edu/static/public/228/sms+spam+collection.zip"
 
 EXPECTED_FILES = {
     "SMSSpamCollection",
@@ -60,15 +56,11 @@ def download_dataset() -> None:
             extract_dir = Path(temp_dir) / "extracted"
             archive.extractall(extract_dir)
 
-        source_root = extract_dir
-
         for expected_file in EXPECTED_FILES:
             candidates = list(extract_dir.rglob(expected_file))
 
             if not candidates:
-                raise RuntimeError(
-                    f"Could not locate extracted file: {expected_file}"
-                )
+                raise RuntimeError(f"Could not locate extracted file: {expected_file}")
 
             shutil.copy2(candidates[0], RAW_DIR / expected_file)
 

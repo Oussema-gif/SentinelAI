@@ -7,7 +7,6 @@ from collections import Counter
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
-
 ALLOWED_LABELS = frozenset({"ham", "spam"})
 
 
@@ -44,9 +43,7 @@ def _read_lines(path: Path) -> list[str]:
     try:
         return path.read_text(encoding="utf-8").splitlines()
     except UnicodeDecodeError as exc:
-        raise DatasetValidationError(
-            f"Dataset is not valid UTF-8: {path}"
-        ) from exc
+        raise DatasetValidationError(f"Dataset is not valid UTF-8: {path}") from exc
 
 
 def validate_dataset(path: str | Path) -> DatasetValidationReport:
@@ -84,8 +81,7 @@ def validate_dataset(path: str | Path) -> DatasetValidationReport:
     if malformed_rows:
         sample = malformed_rows[:5]
         raise DatasetValidationError(
-            "Malformed dataset rows detected. "
-            f"Showing up to 5 examples: {sample}"
+            f"Malformed dataset rows detected. Showing up to 5 examples: {sample}"
         )
 
     empty_messages = sum(not message.strip() for message in messages)
@@ -112,8 +108,7 @@ def validate_dataset(path: str | Path) -> DatasetValidationReport:
 
     if set(label_counts) != ALLOWED_LABELS:
         raise DatasetValidationError(
-            "Dataset must contain both required labels: "
-            f"{sorted(ALLOWED_LABELS)}."
+            f"Dataset must contain both required labels: {sorted(ALLOWED_LABELS)}."
         )
 
     label_percentages = {
