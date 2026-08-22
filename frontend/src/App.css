@@ -385,21 +385,13 @@ svg.app-shell__brand-mark {
 .radar-display,
 .forecast-card,
 .regional-overview,
-.model-info,
-.storm-history {
+.model-info {
   background: rgba(15, 27, 46, 0.74);
   border-color: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
 
-/* Repeated history items: low blur protects timeline scroll performance. */
-.storm-history__entry-button {
-  background: rgba(15, 27, 46, 0.68);
-  border-color: rgba(255, 255, 255, 0.07);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
 
 /* Preserve visibility of existing safe/warning/critical state borders. */
 .forecast-card,
@@ -480,15 +472,9 @@ svg.app-shell__brand-mark {
   .radar-display,
   .forecast-card,
   .regional-overview,
-  .model-info,
-  .storm-history {
+  .model-info {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-  }
-
-  .storm-history__entry-button {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
   }
 }
 
@@ -513,16 +499,11 @@ svg.app-shell__brand-mark {
 .radar-display,
 .forecast-card,
 .regional-overview,
-.model-info,
-.storm-history {
+.model-info {
   background: rgba(15, 27, 46, 0.79);
   border-color: rgba(150, 190, 255, 0.1);
 }
 
-.storm-history__entry-button {
-  background: rgba(15, 27, 46, 0.74);
-  border-color: rgba(150, 190, 255, 0.085);
-}
 
 /*
  * Atmospheric border ring for actual top-level layout shells.
@@ -551,39 +532,19 @@ svg.app-shell__brand-mark {
   mask-composite: exclude;
 }
 
-
-/* Give outer-shell content more breathing room from its rounded frame. */
-.app-shell__history-shell,
-.app-shell__overview-shell,
-.app-shell__model-shell {
-  padding: clamp(1.35rem, 2.5vw, 1.8rem);
-}
-
-/* Keep header content comfortably inside the shell edges. */
-.app-shell__history-shell .storm-history__header {
-  padding: 0.1rem 0.15rem 0.55rem;
-}
-
-/* Prevent the Refresh control from visually touching the upper-right frame. */
-.app-shell__history-shell .storm-history__refresh {
-  margin-top: 0.1rem;
-  margin-right: 0.15rem;
-}
-
-/* Restore the shell's compact geometry. */
+/* Final compact spacing for top-level shell content. */
 .app-shell__history-shell,
 .app-shell__overview-shell,
 .app-shell__model-shell {
   padding: clamp(0.9rem, 2vw, 1.25rem);
 }
 
-/* Add only a small, controlled inset to the Storm History header. */
 .app-shell__history-shell .storm-history__header {
   padding: 0.15rem 0.25rem 0.35rem;
 }
 
-/* Keep Refresh slightly away from the frame without shifting the layout. */
 .app-shell__history-shell .storm-history__refresh {
   margin-top: 0.1rem;
   margin-right: 0.2rem;
 }
+
