@@ -302,13 +302,6 @@
   text-transform: capitalize;
 }
 
-/* NOTE: text-transform: capitalize only uppercases the first letter of
-   each CSS "word" — it does NOT treat underscores as word boundaries.
-   "benign_message" becomes "Benign_message" here, not "Benign Message".
-   This is a display-formatting bug that must be fixed in the component
-   (.tsx) where entry.category is rendered, not in this stylesheet —
-   e.g. entry.category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
-   applied before the value reaches this element. */
 .storm-history__entry-category {
   margin-top: 0.2rem;
   overflow: visible;
