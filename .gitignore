@@ -87,3 +87,10 @@ frontend/.env
 .env.*
 !.env.example
 !.env.production.example
+
+# Generated Python and notebook artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
