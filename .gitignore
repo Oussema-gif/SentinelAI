@@ -1,96 +1,71 @@
-# =========================
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+!.env.production.example
+!frontend/.env.example
+
 # Python
-# =========================
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
 .pytest_cache/
-.coverage
-htmlcov/
 .mypy_cache/
 .ruff_cache/
-
-# Virtual environments
-venv/
+.coverage
+coverage.xml
+htmlcov/
+*.egg-info/
 .venv/
+venv/
 env/
-.env
 
-# =========================
 # Jupyter
-# =========================
 .ipynb_checkpoints/
+*.nbconvert.ipynb
 
-# =========================
-# Node
-# =========================
+# Node/Vite
 node_modules/
+frontend/node_modules/
 dist/
+frontend/dist/
 .vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# =========================
-# SentinelAI data
-# =========================
-ml/data/raw/*
-!ml/data/raw/.gitkeep
-
-ml/data/processed/*
-!ml/data/processed/.gitkeep
-
-# =========================
-# ML artifacts
-# =========================
+# ML datasets and generated artifacts
+ml/data/raw/
+ml/data/processed/
 ml/models/*.joblib
 ml/models/*.pkl
+ml/models/*.pickle
+ml/models/*.onnx
+ml/models/*.metadata.json
 
-# =========================
-# Logs
-# =========================
+# Keep folder structure visible
+!ml/data/raw/.gitkeep
+!ml/data/processed/.gitkeep
+!ml/models/.gitkeep
+
+# Runtime files and logs
 *.log
 logs/
+ops/logs/*.log
+*.pid
+*.sqlite
+*.sqlite3
 
-# =========================
-# IDE
-# =========================
-.idea/
-.vscode/
-*.iml
-
-# =========================
-# OS
-# =========================
+# OS/editor
 .DS_Store
 Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 
-# =========================
-# Environment / secrets
-# =========================
-.env
-.env.*
-!.env.example
-
-# =========================
-# Build / temporary
-# =========================
-tmp/
-temp/
-*.tmp
-
-# Python bytecode anywhere in repository
-__pycache__/
-*.py[cod]
-frontend/.env
-
-# Production and local secrets
-.env
-.env.*
-!.env.example
-!.env.production.example
-
-# Generated Python and notebook artifacts
-__pycache__/
-*.py[cod]
-.pytest_cache/
-.ruff_cache/
-.ipynb_checkpoints/
+# Podman / Docker temporary files
+.containerignore.bak
