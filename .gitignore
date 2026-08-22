@@ -80,3 +80,10 @@ temp/
 # Python bytecode anywhere in repository
 __pycache__/
 *.py[cod]
+frontend/.env
+
+# Production and local secrets
+.env
+.env.*
+!.env.example
+!.env.production.example

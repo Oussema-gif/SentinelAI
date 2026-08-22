@@ -1,0 +1,138 @@
+.lightning-flash {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.lightning-flash::before {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.07);
+  content: "";
+  opacity: 0;
+}
+
+.lightning-flash__svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter:
+    drop-shadow(0 0 0.35rem rgba(255, 255, 255, 0.92))
+    drop-shadow(0 0 1rem rgba(255, 255, 255, 0.38));
+}
+
+.lightning-flash__bolt {
+  fill: #ffffff;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.lightning-flash--1::before {
+  animation: lightning-screen-flash-one 170ms ease-out both;
+}
+
+.lightning-flash--1 .lightning-flash__bolt--primary {
+  animation: lightning-bolt-flash-one 190ms ease-out both;
+}
+
+.lightning-flash--1 .lightning-flash__bolt--secondary {
+  animation: lightning-bolt-flash-one 150ms ease-out 25ms both;
+}
+
+.lightning-flash--2::before {
+  animation: lightning-screen-flash-two 180ms ease-out both;
+}
+
+.lightning-flash--2 .lightning-flash__bolt--primary {
+  animation: lightning-bolt-flash-two 210ms ease-out both;
+}
+
+.lightning-flash--2 .lightning-flash__bolt--secondary {
+  animation: lightning-bolt-flash-two 160ms ease-out 30ms both;
+}
+
+@keyframes lightning-screen-flash-one {
+  0% {
+    opacity: 0;
+  }
+
+  28% {
+    opacity: 0.42;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes lightning-screen-flash-two {
+  0% {
+    opacity: 0;
+  }
+
+  22% {
+    opacity: 0.28;
+  }
+
+  46% {
+    opacity: 0.08;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes lightning-bolt-flash-one {
+  0% {
+    opacity: 0;
+    transform: scale(0.86);
+  }
+
+  24% {
+    opacity: 0.96;
+    transform: scale(1);
+  }
+
+  62% {
+    opacity: 0.2;
+    transform: scale(0.98);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes lightning-bolt-flash-two {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+
+  25% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+
+  55% {
+    opacity: 0.3;
+    transform: scale(0.99);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightning-flash {
+    display: none;
+  }
+}

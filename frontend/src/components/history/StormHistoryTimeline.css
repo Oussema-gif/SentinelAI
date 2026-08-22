@@ -1,0 +1,414 @@
+.storm-history {
+  width: 100%;
+  color: #edf7fb;
+  font-family:
+    Inter,
+    Manrope,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+.storm-history__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.25rem;
+  margin-bottom: 1.1rem;
+}
+
+.storm-history__eyebrow {
+  margin: 0 0 0.45rem;
+  color: #81c7b4;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.storm-history h2 {
+  margin: 0;
+  color: #edf7fb;
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 650;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+}
+
+.storm-history__description {
+  max-width: 36rem;
+  margin: 0.65rem 0 0;
+  color: #9bb4c1;
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.storm-history__refresh {
+  flex: 0 0 auto;
+  padding: 0.55rem 0.8rem;
+  color: #b9d8e3;
+  background: rgba(184, 216, 232, 0.05);
+  border: 1px solid rgba(184, 216, 232, 0.16);
+  border-radius: 0.55rem;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    opacity 160ms ease;
+}
+
+.storm-history__refresh:hover:not(:disabled) {
+  color: #edf7fb;
+  background: rgba(184, 216, 232, 0.1);
+  border-color: rgba(184, 216, 232, 0.3);
+}
+
+.storm-history__refresh:focus-visible {
+  outline: 3px solid rgba(79, 195, 247, 0.68);
+  outline-offset: 3px;
+}
+
+.storm-history__refresh:disabled {
+  cursor: wait;
+  opacity: 0.5;
+}
+
+/* Outer wrapper. The fade effect lives entirely on the scrolling
+   viewport below (via mask-image) — this element no longer paints
+   its own gradient overlays. */
+.storm-history__scroll-shell {
+  position: relative;
+  min-width: 0;
+}
+
+/* The actual horizontally-scrolling element. This is the ONLY place
+   the edge fade is applied. If the fade isn't rendering, confirm in
+   devtools that this exact class is present on the scrolling <div>
+   in the DOM, and that Computed > mask-image is not "none". */
+.storm-history__viewport {
+  position: relative;
+  z-index: 1;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding: 0.65rem 2rem 1rem 0.35rem;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(122, 167, 255, 0.4) transparent;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 32px,
+    #000 calc(100% - 32px),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 32px,
+    #000 calc(100% - 32px),
+    transparent 100%
+  );
+  mask-size: 100% 100%;
+  -webkit-mask-size: 100% 100%;
+}
+
+.storm-history__viewport:focus-visible {
+  outline: 3px solid rgba(79, 195, 247, 0.58);
+  outline-offset: 4px;
+  border-radius: 0.65rem;
+}
+
+.storm-history__viewport::-webkit-scrollbar {
+  height: 4px;
+}
+
+.storm-history__viewport::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.storm-history__viewport::-webkit-scrollbar-thumb {
+  background: rgba(122, 167, 255, 0.4);
+  border-radius: 2px;
+}
+
+.storm-history__viewport::-webkit-scrollbar-thumb:hover {
+  background: rgba(122, 167, 255, 0.62);
+}
+
+/* The card row itself. This — not the viewport — is where display:flex
+   belongs, since these are the actual cards being laid out. */
+.storm-history__timeline {
+  position: relative;
+  display: flex;
+  min-width: max-content;
+  gap: 0.7rem;
+  margin: 0;
+  padding: 1.15rem 0.2rem 0.25rem;
+  list-style: none;
+}
+
+.storm-history__timeline::before {
+  position: absolute;
+  top: 1.45rem;
+  right: 0.2rem;
+  left: 0.2rem;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(79, 195, 247, 0.18),
+    rgba(240, 160, 80, 0.22),
+    rgba(255, 70, 85, 0.24)
+  );
+  content: "";
+}
+
+.storm-history__entry {
+  position: relative;
+  width: min(19rem, 78vw);
+  align-self: stretch;
+}
+
+.storm-history__entry-button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 220px;
+  min-height: 220px;
+  max-height: 220px;
+  padding: 1.15rem 1rem 0.95rem;
+  overflow: hidden;
+  color: #edf7fb;
+  text-align: left;
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--storm-color, #7aa7ff) 7%, transparent),
+      transparent 52%
+    ),
+    rgba(15, 27, 46, 0.74);
+  border: 1px solid rgba(184, 216, 232, 0.13);
+  border-left: 3px solid var(--storm-color, rgba(122, 167, 255, 0.5));
+  border-radius: 0.8rem;
+  cursor: pointer;
+  box-shadow:
+    inset 1px 0 0
+      color-mix(in srgb, var(--storm-color, #7aa7ff) 20%, transparent),
+    0 0 1.15rem
+      color-mix(in srgb, var(--storm-color, #7aa7ff) 6%, transparent);
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+
+/* Top-left clipped dot marker permanently removed (was the visual bug). */
+
+.storm-history__entry-button:hover,
+.storm-history__entry-button:focus-visible {
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--storm-color, #7aa7ff) 11%, transparent),
+      transparent 58%
+    ),
+    rgba(20, 37, 61, 0.86);
+  border-color: var(--storm-color, #7aa7ff);
+  transform: translateY(-3px);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.4),
+    0 0 24px 0 color-mix(in srgb, var(--storm-color, #7aa7ff) 24%, transparent);
+}
+
+.storm-history__entry-button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--storm-color, #7aa7ff) 72%, white);
+  outline-offset: 3px;
+}
+
+.storm-history__entry--selected .storm-history__entry-button {
+  background: color-mix(
+    in srgb,
+    var(--storm-color, #7aa7ff) 10%,
+    rgba(17, 31, 51, 0.82)
+  );
+  border-color: color-mix(in srgb, var(--storm-color, #7aa7ff) 58%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--storm-color, #7aa7ff) 25%, transparent),
+    0 0.8rem 2rem rgba(0, 0, 0, 0.2);
+}
+
+.storm-history__storm-dot {
+  position: absolute;
+  top: 0.84rem;
+  right: 0.95rem;
+  width: var(--storm-size);
+  height: var(--storm-size);
+  min-width: 0.65rem;
+  min-height: 0.65rem;
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      rgba(255, 255, 255, 0.72),
+      transparent 24%
+    ),
+    var(--storm-color);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  box-shadow: 0 0 1rem var(--storm-color);
+}
+
+.storm-history__entry-date {
+  max-width: calc(100% - 2rem);
+  color: #77919e;
+  font-size: 0.68rem;
+  line-height: 1.4;
+}
+
+.storm-history__entry-severity {
+  display: flex;
+  align-items: baseline;
+  gap: 0.2rem;
+  margin-top: 0.65rem;
+  color: var(--storm-color);
+  font-family:
+    "IBM Plex Mono", "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.storm-history__entry-severity strong {
+  font-size: 1.65rem;
+  line-height: 1;
+}
+
+.storm-history__entry-severity small {
+  color: #77919e;
+  font-size: 0.68rem;
+}
+
+.storm-history__entry-risk {
+  margin-top: 0.45rem;
+  color: var(--storm-color, #7aa7ff);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+/* NOTE: text-transform: capitalize only uppercases the first letter of
+   each CSS "word" — it does NOT treat underscores as word boundaries.
+   "benign_message" becomes "Benign_message" here, not "Benign Message".
+   This is a display-formatting bug that must be fixed in the component
+   (.tsx) where entry.category is rendered, not in this stylesheet —
+   e.g. entry.category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+   applied before the value reaches this element. */
+.storm-history__entry-category {
+  margin-top: 0.2rem;
+  overflow: visible;
+  color: #9bb4c1;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  text-transform: capitalize;
+  white-space: normal;
+}
+
+.storm-history__entry-preview {
+  display: -webkit-box;
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-top: 0.75rem;
+  overflow: hidden;
+  color: #b9cbd1;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.storm-history__entry-classifier {
+  flex: 0 0 auto;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  color: #6f8996;
+  font-size: 0.64rem;
+  line-height: 1.4;
+}
+
+.storm-history__empty,
+.storm-history__error {
+  padding: 1rem;
+  border-radius: 0.7rem;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.storm-history__empty {
+  color: #9bb4c1;
+  background: rgba(4, 12, 23, 0.3);
+  border: 1px solid rgba(184, 216, 232, 0.12);
+}
+
+.storm-history__error {
+  color: #ff9ca5;
+  background: rgba(255, 70, 85, 0.07);
+  border: 1px solid rgba(255, 70, 85, 0.25);
+}
+
+@media (max-width: 560px) {
+  .storm-history__header {
+    flex-direction: column;
+  }
+
+  .storm-history__refresh {
+    align-self: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .storm-history *,
+  .storm-history *::before,
+  .storm-history *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .storm-history__entry-button {
+    transition: none;
+  }
+
+  .storm-history__entry-button:hover,
+  .storm-history__entry-button:focus-visible {
+    transform: none;
+  }
+}
+/* Safe outer Storm History frame: no overlay and no content obstruction. */
+.storm-history {
+  border: 1px solid rgba(184, 216, 232, 0.1);
+  border-radius: 1rem;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(184, 216, 232, 0.035) 0%,
+      transparent 42%,
+      rgba(184, 216, 232, 0.012) 100%
+    ),
+    rgba(15, 27, 46, 0.79);
+  box-shadow:
+    inset 0 1px 0 rgba(184, 216, 232, 0.12),
+    0 18px 45px rgba(0, 0, 0, 0.16);
+}
+
+/* Keep the header visually above the timeline rail. */
+.storm-history__header {
+  position: relative;
+  z-index: 1;
+}

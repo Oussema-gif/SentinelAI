@@ -1,0 +1,282 @@
+.radar-display {
+  --radar-color: #4fc3f7;
+
+  position: relative;
+  width: min(100%, 560px);
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  color: #edf7fb;
+  background:
+    radial-gradient(
+      circle at 50% 28%,
+      color-mix(in srgb, var(--radar-color) 7%, transparent),
+      transparent 46%
+    ),
+    linear-gradient(145deg, rgba(15, 27, 46, 0.88), rgba(5, 12, 24, 0.93));
+  border: 1px solid color-mix(in srgb, var(--radar-color) 24%, transparent);
+  border-radius: 1.25rem;
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, 0.3),
+    inset 0 1px rgba(255, 255, 255, 0.045);
+  font-family:
+    Inter,
+    Manrope,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+.radar-display__heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.radar-display__eyebrow {
+  margin: 0 0 0.45rem;
+  color: var(--radar-color);
+  font-size: 0.7rem;
+  font-weight: 750;
+  letter-spacing: 0.15em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.radar-display h2 {
+  margin: 0;
+  color: #edf7fb;
+  font-size: clamp(1.3rem, 3vw, 1.9rem);
+  font-weight: 650;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+.radar-display__stage {
+  position: relative;
+  width: min(100%, 440px);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      color-mix(in srgb, var(--radar-color) 11%, transparent),
+      transparent 57%
+    ),
+    rgba(3, 9, 18, 0.76);
+  border: 1px solid color-mix(in srgb, var(--radar-color) 28%, transparent);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 0.45rem rgba(3, 9, 18, 0.42),
+    0 0 3rem color-mix(in srgb, var(--radar-color) 12%, transparent),
+    inset 0 0 3rem rgba(0, 0, 0, 0.58);
+}
+
+.radar-display__stage::before,
+.radar-display__stage::after {
+  position: absolute;
+  z-index: 4;
+  border: 1px solid color-mix(in srgb, var(--radar-color) 24%, transparent);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.radar-display__stage::before {
+  inset: 5%;
+}
+
+.radar-display__stage::after {
+  inset: 11%;
+  border-color: color-mix(in srgb, var(--radar-color) 12%, transparent);
+}
+
+.radar-display__atmosphere {
+  position: absolute;
+  z-index: 0;
+  inset: -18%;
+  background:
+    radial-gradient(
+      ellipse at 30% 28%,
+      rgba(134, 176, 194, 0.08),
+      transparent 33%
+    ),
+    radial-gradient(
+      ellipse at 72% 60%,
+      rgba(90, 137, 157, 0.06),
+      transparent 36%
+    );
+  filter: blur(18px);
+  opacity: 0.78;
+  transform: rotate(-12deg);
+}
+
+.radar-display__svg {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.radar-display__background {
+  opacity: 0.95;
+}
+
+.radar-display__range-rings {
+  fill: none;
+  stroke: color-mix(in srgb, var(--radar-color) 23%, transparent);
+  stroke-width: 0.7;
+}
+
+.radar-display__range-ring:nth-child(2) {
+  stroke: color-mix(in srgb, var(--radar-color) 18%, transparent);
+}
+
+.radar-display__range-ring:nth-child(3) {
+  stroke: color-mix(in srgb, var(--radar-color) 14%, transparent);
+}
+
+.radar-display__range-ring:nth-child(4) {
+  stroke: color-mix(in srgb, var(--radar-color) 10%, transparent);
+}
+
+.radar-display__crosshair {
+  fill: none;
+  stroke: color-mix(in srgb, var(--radar-color) 12%, transparent);
+  stroke-dasharray: 1.5 5;
+  stroke-width: 0.65;
+}
+
+.radar-display__center-point {
+  filter: drop-shadow(0 0 0.65rem var(--radar-color));
+}
+
+.radar-display__sweep {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: radar-display-sweep-idle 8s linear infinite;
+}
+
+.radar-display__sweep path:first-child {
+  fill: none;
+  stroke: color-mix(in srgb, var(--radar-color) 75%, white);
+  stroke-linecap: round;
+  stroke-width: 1.15;
+}
+
+.radar-display__sweep path:last-child {
+  fill: color-mix(in srgb, var(--radar-color) 16%, transparent);
+  opacity: 0.72;
+}
+
+.radar-display__sweep--active {
+  animation-duration: 1.25s;
+}
+
+.radar-display__sweep--active path:first-child {
+  stroke-width: 1.8;
+  filter: drop-shadow(0 0 0.35rem var(--radar-color));
+}
+
+.radar-display__sweep--active path:last-child {
+  opacity: 0.95;
+}
+
+.radar-display__status {
+  position: absolute;
+  z-index: 5;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.7rem;
+  color: #b8ccd5;
+  background: rgba(3, 9, 18, 0.58);
+  border: 1px solid color-mix(in srgb, var(--radar-color) 18%, transparent);
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: capitalize;
+  backdrop-filter: blur(8px);
+}
+
+.radar-display__status-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  box-shadow: 0 0 0.75rem var(--radar-color);
+}
+
+.radar-display--analyzing .radar-display__status {
+  color: #edf7fb;
+}
+
+.radar-display--analyzing .radar-display__status-dot {
+  animation: radar-display-status-pulse 0.9s ease-in-out infinite;
+}
+
+@keyframes radar-display-sweep-idle {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes radar-display-status-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(0.86);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@media (max-width: 620px) {
+  .radar-display__heading {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .radar-display__stage {
+    width: min(100%, 470px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .radar-display__sweep,
+  .radar-display__sweep--active,
+  .radar-display--analyzing .radar-display__status-dot {
+    animation: none;
+  }
+
+  .radar-display__sweep {
+    opacity: 0.6;
+    transform: none;
+  }
+
+  .radar-display *,
+  .radar-display *::before,
+  .radar-display *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

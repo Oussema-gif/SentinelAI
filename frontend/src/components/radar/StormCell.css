@@ -1,0 +1,110 @@
+.storm-cell__group {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.storm-cell__outer-glow,
+.storm-cell__body,
+.storm-cell__core,
+.storm-cell__severity-outline {
+  transition:
+    r 520ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 320ms ease,
+    fill 320ms ease,
+    stroke 320ms ease;
+}
+
+.storm-cell__outer-glow {
+  filter: blur(9px);
+}
+
+.storm-cell__body {
+  filter: blur(1.2px);
+}
+
+.storm-cell__core {
+  filter: blur(0.4px);
+}
+
+.storm-cell__group--active
+  .storm-cell__outer-glow {
+  animation: storm-cell-glow-pulse 1.8s ease-in-out infinite;
+}
+
+.storm-cell__group--active
+  .storm-cell__core {
+  animation: storm-cell-core-pulse 1.35s ease-in-out infinite;
+}
+
+.storm-cell__lightning {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: storm-cell-lightning-flicker 2.4s ease-in-out infinite;
+}
+
+@keyframes storm-cell-glow-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.96);
+  }
+
+  50% {
+    opacity: 0.48;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes storm-cell-core-pulse {
+  0%,
+  100% {
+    opacity: 0.65;
+    transform: scale(0.94);
+  }
+
+  50% {
+    opacity: 0.92;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes storm-cell-lightning-flicker {
+  0%,
+  72%,
+  100% {
+    opacity: 0.3;
+  }
+
+  74% {
+    opacity: 1;
+  }
+
+  76% {
+    opacity: 0.18;
+  }
+
+  78% {
+    opacity: 0.8;
+  }
+
+  81% {
+    opacity: 0.28;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .storm-cell__group--active
+    .storm-cell__outer-glow,
+  .storm-cell__group--active
+    .storm-cell__core,
+  .storm-cell__lightning {
+    animation: none;
+  }
+
+  .storm-cell__outer-glow,
+  .storm-cell__body,
+  .storm-cell__core,
+  .storm-cell__severity-outline {
+    transition-duration: 0.01ms;
+  }
+}

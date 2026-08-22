@@ -34,9 +34,9 @@ def test_cleaner_handles_empty_string() -> None:
 def test_cleaner_preserves_non_ascii() -> None:
     cleaner = TextCleaner()
 
-    result = cleaner.fit_transform(["I’ll pay £50 — déjà vu ü"])
+    result = cleaner.fit_transform(["I'll pay £50 — déjà vu ü"])
 
-    assert result[0] == "I’ll pay £50 — déjà vu ü"
+    assert result[0] == "I'll pay £50 — déjà vu ü"
 
 
 def test_cleaner_preserves_uppercase_and_digits() -> None:

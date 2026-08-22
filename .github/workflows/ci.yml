@@ -1,0 +1,117 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: sentinelai
+          POSTGRES_PASSWORD: sentinelai_test
+          POSTGRES_DB: sentinelai_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+          cache: "pip"
+
+      - name: Install API dependencies
+        working-directory: api
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Lint
+        working-directory: api
+        run: |
+          pip install ruff
+          ruff check api/app api/tests
+          ruff format --check api/app api/tests
+
+      - name: Run tests
+        working-directory: api
+        env:
+          DATABASE_URL: postgresql+psycopg://sentinelai:sentinelai_test@localhost:5432/sentinelai_test
+          PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/ml/src
+        run: |
+          pip install pytest
+          pytest -q api/tests
+YAMLmkdir -p .github/workflows
+
+cat > .github/workflows/ci.yml <<'YAML'
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: sentinelai
+          POSTGRES_PASSWORD: sentinelai_test
+          POSTGRES_DB: sentinelai_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+          cache: "pip"
+
+      - name: Install API dependencies
+        working-directory: api
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Lint
+        working-directory: api
+        run: |
+          pip install ruff
+          ruff check api/app api/tests
+          ruff format --check api/app api/tests
+
+      - name: Run tests
+        working-directory: api
+        env:
+          DATABASE_URL: postgresql+psycopg://sentinelai:sentinelai_test@localhost:5432/sentinelai_test
+          PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/ml/src
+        run: |
+          pip install pytest
+          pytest -q api/tests

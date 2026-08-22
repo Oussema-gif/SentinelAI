@@ -1,0 +1,53 @@
+FROM python:3.14-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app:/app/ml/src
+
+WORKDIR /app
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY api/requirements.txt /app/api/requirements.txt
+
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r /app/api/requirements.txt
+
+COPY api /app/api
+COPY ml/src /app/ml/src
+COPY ml/models /app/ml/models
+
+# Build-time verification.
+# The image MUST fail if the new threat-intelligence files
+# are not actually present inside the build.
+RUN test -f /app/api/app/routers/threat.py \
+    && test -f /app/api/app/services/threat_analysis_service.py \
+    && test -f /app/api/app/services/threat_investigation_repository.py \
+    && test -f /app/api/app/services/threat_investigation_service.py \
+    && test -f /app/api/app/services/threat_analytics_repository.py \
+    && test -f /app/api/app/services/threat_analytics_service.py \
+    && test -f /app/api/app/schemas/threat.py \
+    && test -f /app/api/app/schemas/threat_analytics.py \
+    && test -f /app/api/app/db/models/threat_investigation.py \
+    && test -f /app/api/alembic/versions/0002_threat_investigations.py \
+    && grep -q '"/analytics/overview"' /app/api/app/routers/threat.py \
+    && grep -q '"/analytics/risk-distribution"' /app/api/app/routers/threat.py \
+    && grep -q '"/analytics/categories"' /app/api/app/routers/threat.py \
+    && grep -q '"/analytics/signals"' /app/api/app/routers/threat.py \
+    && echo "=== SentinelAI threat + analytics files verified inside image ==="
+
+RUN useradd \
+      --create-home \
+      --uid 10001 \
+      --shell /usr/sbin/nologin \
+      sentinelai \
+    && chown -R sentinelai:sentinelai /app
+
+USER sentinelai
+
+EXPOSE 8000
+
+ENTRYPOINT ["/app/api/docker/entrypoint.sh"]

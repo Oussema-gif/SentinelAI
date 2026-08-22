@@ -7,7 +7,11 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 
 from api.app.db.base import Base
-from api.app.db.models import ModelVersion, Prediction  # noqa: F401
+from api.app.db.models import (  # noqa: F401
+    ModelVersion,
+    Prediction,
+    ThreatInvestigation,
+)
 
 
 config = context.config

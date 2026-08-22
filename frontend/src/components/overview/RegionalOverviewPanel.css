@@ -1,0 +1,301 @@
+.regional-overview {
+  width: 100%;
+  padding: 1.2rem;
+  color: #edf7fb;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(79, 195, 247, 0.06), transparent 42%),
+    rgba(10, 18, 32, 0.58);
+  border: 1px solid rgba(184, 216, 232, 0.13);
+  border-radius: 1rem;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.03);
+  font-family:
+    Inter,
+    Manrope,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+.regional-overview__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.regional-overview__eyebrow {
+  margin: 0 0 0.4rem;
+  color: #81c7b4;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.regional-overview h2 {
+  margin: 0;
+  color: #edf7fb;
+  font-size: 1.15rem;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.regional-overview__refresh {
+  flex: 0 0 auto;
+  padding: 0.45rem 0.65rem;
+  color: #9bb4c1;
+  background: rgba(184, 216, 232, 0.04);
+  border: 1px solid rgba(184, 216, 232, 0.15);
+  border-radius: 0.5rem;
+  font: inherit;
+  font-size: 0.64rem;
+  font-weight: 700;
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    opacity 160ms ease;
+}
+
+.regional-overview__refresh:hover:not(:disabled) {
+  color: #edf7fb;
+  background: rgba(184, 216, 232, 0.1);
+  border-color: rgba(184, 216, 232, 0.28);
+}
+
+.regional-overview__refresh:focus-visible {
+  outline: 3px solid rgba(79, 195, 247, 0.66);
+  outline-offset: 3px;
+}
+
+.regional-overview__refresh:disabled {
+  cursor: wait;
+  opacity: 0.5;
+}
+
+.regional-overview__primary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.55rem;
+  margin-top: 1.25rem;
+  padding: 0.9rem;
+  background: rgba(4, 12, 23, 0.38);
+  border: 1px solid rgba(79, 195, 247, 0.14);
+  border-radius: 0.75rem;
+}
+
+.regional-overview__average {
+  display: flex;
+  align-items: baseline;
+  gap: 0.18rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.regional-overview__average-label {
+  display: block;
+  margin-right: 0.35rem;
+  white-space: nowrap;
+  color: #77919e;
+  font-family: Inter, Manrope, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.63rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.regional-overview__average strong {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.regional-overview__average > span:last-child {
+  color: #77919e;
+  font-size: 0.68rem;
+}
+
+.regional-overview__average-copy {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.regional-overview__average-copy span {
+  min-width: 0;
+  color: #d9eaf0;
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1.3;
+  overflow-wrap: normal;
+  text-transform: capitalize;
+  white-space: normal;
+}
+
+.regional-overview__scan-count {
+  display: inline-block;
+  flex: 0 0 auto;
+  margin: 0;
+  color: #77919e;
+  font-size: 0.62rem;
+  font-weight: 650;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.regional-overview__metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin-top: 0.65rem;
+}
+
+.regional-overview__metric {
+  min-width: 0;
+  padding: 0.65rem 0.6rem;
+  background: rgba(4, 12, 23, 0.28);
+  border: 1px solid var(--metric-border);
+  border-top: 2px solid var(--metric-color);
+  border-radius: 0.6rem;
+}
+
+.regional-overview__metric--clear {
+  --metric-color: #81c7b4;
+  --metric-border: rgba(129, 199, 180, 0.2);
+}
+
+.regional-overview__metric--medium {
+  --metric-color: #f4d35e;
+  --metric-border: rgba(244, 211, 94, 0.2);
+}
+
+.regional-overview__metric--high {
+  --metric-color: #f0a050;
+  --metric-border: rgba(240, 160, 80, 0.22);
+}
+
+.regional-overview__metric--critical {
+  --metric-color: #ff4655;
+  --metric-border: rgba(255, 70, 85, 0.24);
+}
+
+.regional-overview__metric-label {
+  display: block;
+  color: #77919e;
+  font-size: clamp(0.56rem, 1.4vw, 0.62rem);
+  line-height: 1.25;
+  overflow-wrap: normal;
+  white-space: normal;
+}
+
+.regional-overview__metric-value {
+  display: block;
+  margin-top: 0.3rem;
+  color: var(--metric-color);
+  font-family:
+    "IBM Plex Mono", "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, monospace;
+  font-size: 1.2rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.regional-overview__metric-detail {
+  display: block;
+  margin-top: 0.25rem;
+  color: #9bb4c1;
+  font-family:
+    "IBM Plex Mono", "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, monospace;
+  font-size: 0.62rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.regional-overview__secondary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin: 1rem 0 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(184, 216, 232, 0.1);
+}
+
+.regional-overview__secondary div {
+  min-width: 0;
+}
+
+.regional-overview__secondary dt {
+  color: #77919e;
+  font-size: clamp(0.56rem, 1.4vw, 0.62rem);
+  line-height: 1.3;
+  overflow-wrap: normal;
+  white-space: normal;
+}
+
+.regional-overview__secondary dd {
+  margin: 0.3rem 0 0;
+  color: #cbdde4;
+  font-size: clamp(0.64rem, 1.6vw, 0.7rem);
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: break-word;
+  text-transform: capitalize;
+  white-space: normal;
+}
+
+.regional-overview__empty,
+.regional-overview__error {
+  margin: 1rem 0 0;
+  padding: 0.8rem;
+  border-radius: 0.6rem;
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
+.regional-overview__empty {
+  color: #9bb4c1;
+  background: rgba(4, 12, 23, 0.3);
+  border: 1px solid rgba(184, 216, 232, 0.11);
+}
+
+.regional-overview__error {
+  color: #ff9ca5;
+  background: rgba(255, 70, 85, 0.07);
+  border: 1px solid rgba(255, 70, 85, 0.24);
+}
+
+@media (max-width: 720px) {
+  .regional-overview__secondary {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .regional-overview__average-copy {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .regional-overview__metrics,
+  .regional-overview__secondary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .regional-overview *,
+  .regional-overview *::before,
+  .regional-overview *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

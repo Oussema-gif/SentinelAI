@@ -1,184 +1,589 @@
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
-
-  &:hover {
-    border-color: var(--accent-border);
-  }
-  &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
+.app-shell {
+  width: 100%;
+  min-height: 100vh;
+  padding: clamp(0.75rem, 2vw, 1.5rem);
 }
 
-.hero {
+.app-shell__container {
+  width: min(100%, 1440px);
+  margin: 0 auto;
+}
+
+.app-shell__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  margin: 0 auto clamp(1.25rem, 3vw, 2rem);
+}
+
+.app-shell__brand {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+}
+
+.app-shell__brand-mark {
   position: relative;
-
-  .base,
-  .framework,
-  .vite {
-    inset-inline: 0;
-    margin: 0 auto;
-  }
-
-  .base {
-    width: 170px;
-    position: relative;
-    z-index: 0;
-  }
-
-  .framework,
-  .vite {
-    position: absolute;
-  }
-
-  .framework {
-    z-index: 1;
-    top: 34px;
-    height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
-  }
-
-  .vite {
-    z-index: 0;
-    top: 107px;
-    height: 26px;
-    width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
-  }
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  margin-top: 0.1rem;
+  color: #4fc3f7;
+  border: 1px solid rgba(79, 195, 247, 0.56);
+  border-radius: 50%;
+  box-shadow:
+    0 0 1.2rem rgba(79, 195, 247, 0.22),
+    inset 0 0 0.7rem rgba(79, 195, 247, 0.1);
 }
 
-#center {
+.app-shell__brand-mark::before,
+.app-shell__brand-mark::after {
+  position: absolute;
+  background: currentColor;
+  content: "";
+  opacity: 0.58;
+}
+
+.app-shell__brand-mark::before {
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 1px;
+  transform: translateY(-50%);
+}
+
+.app-shell__brand-mark::after {
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-50%);
+}
+
+.app-shell__brand-mark span {
+  position: relative;
+  z-index: 1;
+  width: 0.42rem;
+  height: 0.42rem;
+  background: #4fc3f7;
+  border: 1px solid #d8f2ff;
+  border-radius: 50%;
+  box-shadow: 0 0 0.8rem rgba(79, 195, 247, 0.85);
+}
+
+.app-shell__brand-copy h1 {
+  margin: 0;
+  color: #edf7fb;
+  font-size: clamp(1.3rem, 3vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+}
+
+.app-shell__brand-copy p {
+  max-width: 36rem;
+  margin: 0.5rem 0 0;
+  color: #9bb4c1;
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.app-shell__header-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.75rem;
+  color: #b9cbd1;
+  background: rgba(4, 12, 23, 0.35);
+  border: 1px solid rgba(184, 216, 232, 0.13);
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.app-shell__header-status-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  background: #81c7b4;
+  border-radius: 50%;
+  box-shadow: 0 0 0.75rem rgba(129, 199, 180, 0.7);
+}
+
+.app-shell__analysis-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(20rem, 24rem);
+  align-items: start;
+  gap: clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.app-shell__main-flow {
   display: flex;
   flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
-
-  @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
-    gap: 18px;
-  }
+  gap: 1rem;
+  min-width: 0;
 }
 
-#next-steps {
+.app-shell__radar-shell {
+  order: 0;
+  scroll-margin-top: 1rem;
+}
+
+.app-shell__forecast-shell {
+  min-width: 0;
+}
+
+.app-shell__side-flow {
   display: flex;
-  border-top: 1px solid var(--border);
-  text-align: left;
-
-  & > div {
-    flex: 1 1 0;
-    padding: 32px;
-    @media (max-width: 1024px) {
-      padding: 24px 20px;
-    }
-  }
-
-  .icon {
-    margin-bottom: 16px;
-    width: 22px;
-    height: 22px;
-  }
-
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    text-align: center;
-  }
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
 }
 
-#docs {
-  border-right: 1px solid var(--border);
-
-  @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
+.app-shell__secondary-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1rem, 2.5vw, 1.5rem);
+  margin-top: clamp(1rem, 2.5vw, 1.5rem);
 }
 
-#next-steps ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  gap: 8px;
-  margin: 32px 0 0;
-
-  .logo {
-    height: 18px;
-  }
-
-  a {
-    color: var(--text-h);
-    font-size: 16px;
-    border-radius: 6px;
-    background: var(--social-bg);
-    display: flex;
-    padding: 6px 12px;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: box-shadow 0.3s;
-
-    &:hover {
-      box-shadow: var(--shadow);
-    }
-    .button-icon {
-      height: 18px;
-      width: 18px;
-    }
-  }
-
-  @media (max-width: 1024px) {
-    margin-top: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-
-    li {
-      flex: 1 1 calc(50% - 8px);
-    }
-
-    a {
-      width: 100%;
-      justify-content: center;
-      box-sizing: border-box;
-    }
-  }
-}
-
-#spacer {
-  height: 88px;
-  border-top: 1px solid var(--border);
-  @media (max-width: 1024px) {
-    height: 48px;
-  }
-}
-
-.ticks {
+.app-shell__history-shell,
+.app-shell__overview-shell,
+.app-shell__model-shell {
   position: relative;
-  width: 100%;
+  isolation: isolate;
+  min-width: 0;
+  padding: clamp(0.9rem, 2vw, 1.25rem);
+  background: rgba(10, 18, 32, 0.46);
+  background-clip: padding-box;
+  border: 1px solid transparent;
+  border-radius: 1rem;
+}
 
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: -4.5px;
-    border: 5px solid transparent;
+.app-shell__right-secondary {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.app-shell__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 0.9rem 0 0.25rem;
+  color: #627d8b;
+  border-top: 1px solid rgba(184, 216, 232, 0.08);
+  font-size: 0.66rem;
+  line-height: 1.5;
+}
+
+.app-shell__footer p {
+  margin: 0;
+}
+
+.app-shell__footer code {
+  color: #8faab6;
+  font-family:
+    "IBM Plex Mono", "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, monospace;
+}
+
+@media (max-width: 1080px) {
+  .app-shell__analysis-layout {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  &::before {
-    left: 0;
-    border-left-color: var(--border);
+  .app-shell__side-flow {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  &::after {
-    right: 0;
-    border-right-color: var(--border);
+
+  .app-shell__model-shell {
+    grid-column: 1 / -1;
   }
+}
+
+@media (max-width: 760px) {
+  .app-shell__header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .app-shell__header-status {
+    align-self: flex-start;
+  }
+
+  .app-shell__side-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .app-shell__model-shell {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 520px) {
+  .app-shell {
+    padding: 0.75rem;
+  }
+
+  .app-shell__brand-copy p {
+    font-size: 0.76rem;
+  }
+
+  .app-shell__footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-shell *,
+  .app-shell *::before,
+  .app-shell *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.app-shell__brand-mark {
+  color: var(--accent-blue, #7aa7ff);
+}
+
+/* Custom SentinelAI logo: remove the former CSS-generated target mark. */
+.app-shell__brand-mark > span,
+.app-shell__brand-mark::before,
+.app-shell__brand-mark::after {
+  content: none;
+  display: none;
+}
+
+svg.app-shell__brand-mark {
+  display: block;
+  flex: 0 0 auto;
+}
+
+/* Atmospheric sky: fixed, decorative, and intentionally behind app content. */
+.app-shell {
+  isolation: isolate;
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at 18% 0%,
+      rgba(35, 72, 122, 0.16),
+      transparent 36%
+    ),
+    linear-gradient(135deg, #0a1220 0%, #0f1b2e 100%);
+}
+
+.app-shell__container {
+  position: relative;
+  z-index: 1;
+}
+
+.app-shell__atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.app-shell__cloud {
+  position: absolute;
+  display: block;
+  width: min(78vw, 980px);
+  aspect-ratio: 1.8;
+  border-radius: 50%;
+  filter: blur(72px);
+  opacity: 0.1;
+  will-change: transform;
+}
+
+.app-shell__cloud--one {
+  top: -20%;
+  left: -25%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(102, 145, 202, 0.72) 0%,
+    rgba(77, 112, 164, 0.26) 44%,
+    transparent 72%
+  );
+  animation: sentinelai-cloud-drift-one 96s ease-in-out infinite alternate;
+}
+
+.app-shell__cloud--two {
+  top: 28%;
+  right: -34%;
+  width: min(74vw, 900px);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(91, 124, 168, 0.62) 0%,
+    rgba(52, 81, 121, 0.22) 46%,
+    transparent 72%
+  );
+  opacity: 0.085;
+  animation: sentinelai-cloud-drift-two 118s ease-in-out infinite alternate;
+}
+
+.app-shell__cloud--three {
+  bottom: -34%;
+  left: 12%;
+  width: min(68vw, 820px);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(73, 114, 166, 0.56) 0%,
+    rgba(45, 76, 113, 0.2) 48%,
+    transparent 72%
+  );
+  opacity: 0.075;
+  animation: sentinelai-cloud-drift-three 74s ease-in-out infinite alternate;
+}
+
+.app-shell__stars {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 58vh;
+  opacity: 0.26;
+  background-image:
+    radial-gradient(circle at 7% 14%, rgba(214, 230, 255, 0.8) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 18% 31%, rgba(214, 230, 255, 0.58) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 31% 9%, rgba(214, 230, 255, 0.7) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 43% 24%, rgba(214, 230, 255, 0.55) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 57% 12%, rgba(214, 230, 255, 0.72) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 69% 33%, rgba(214, 230, 255, 0.52) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 82% 17%, rgba(214, 230, 255, 0.72) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 94% 38%, rgba(214, 230, 255, 0.54) 0 1px, transparent 1.5px);
+  animation: sentinelai-star-twinkle 13s ease-in-out infinite alternate;
+}
+
+.app-shell__lightning {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background:
+    radial-gradient(
+      ellipse at 78% 24%,
+      rgba(149, 186, 255, 0.1),
+      transparent 28%
+    );
+  animation: sentinelai-distant-lightning 37s linear infinite;
+}
+
+/*
+ * Primary card glass surfaces.
+ * Storm-history entries deliberately use a lighter treatment below because
+ * many can appear simultaneously in the scrollable timeline.
+ */
+.message-intake,
+.radar-display,
+.forecast-card,
+.regional-overview,
+.model-info,
+.storm-history {
+  background: rgba(15, 27, 46, 0.74);
+  border-color: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Repeated history items: low blur protects timeline scroll performance. */
+.storm-history__entry-button {
+  background: rgba(15, 27, 46, 0.68);
+  border-color: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Preserve visibility of existing safe/warning/critical state borders. */
+.forecast-card,
+.message-intake,
+.radar-display {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.035),
+    var(--card-shadow, 0 18px 45px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes sentinelai-cloud-drift-one {
+  from {
+    transform: translate3d(-5%, -2%, 0) scale(1);
+  }
+
+  to {
+    transform: translate3d(18%, 10%, 0) scale(1.16);
+  }
+}
+
+@keyframes sentinelai-cloud-drift-two {
+  from {
+    transform: translate3d(6%, -3%, 0) scale(1.02);
+  }
+
+  to {
+    transform: translate3d(-19%, 13%, 0) scale(1.18);
+  }
+}
+
+@keyframes sentinelai-cloud-drift-three {
+  from {
+    transform: translate3d(-4%, 5%, 0) scale(1);
+  }
+
+  to {
+    transform: translate3d(16%, -12%, 0) scale(1.14);
+  }
+}
+
+@keyframes sentinelai-star-twinkle {
+  from {
+    opacity: 0.15;
+  }
+
+  to {
+    opacity: 0.3;
+  }
+}
+
+@keyframes sentinelai-distant-lightning {
+  0%,
+  95.7%,
+  96.3%,
+  100% {
+    opacity: 0;
+  }
+
+  95.9% {
+    opacity: 0.18;
+  }
+
+  96.05% {
+    opacity: 0.04;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-shell__cloud,
+  .app-shell__stars,
+  .app-shell__lightning {
+    animation: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .message-intake,
+  .radar-display,
+  .forecast-card,
+  .regional-overview,
+  .model-info,
+  .storm-history {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .storm-history__entry-button {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* Atmospheric visibility and glass separation tuning. */
+.app-shell__cloud--one {
+  opacity: 0.14;
+}
+
+.app-shell__cloud--two {
+  opacity: 0.115;
+}
+
+.app-shell__cloud--three {
+  opacity: 0.1;
+}
+
+.app-shell__stars {
+  opacity: 0.34;
+}
+
+.message-intake,
+.radar-display,
+.forecast-card,
+.regional-overview,
+.model-info,
+.storm-history {
+  background: rgba(15, 27, 46, 0.79);
+  border-color: rgba(150, 190, 255, 0.1);
+}
+
+.storm-history__entry-button {
+  background: rgba(15, 27, 46, 0.74);
+  border-color: rgba(150, 190, 255, 0.085);
+}
+
+/*
+ * Atmospheric border ring for actual top-level layout shells.
+ * The pseudo-element sits behind content but above the shell background.
+ */
+.app-shell__history-shell::before,
+.app-shell__overview-shell::before,
+.app-shell__model-shell::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  padding: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(184, 216, 232, 0.2) 0%,
+    rgba(184, 216, 232, 0.075) 55%,
+    rgba(184, 216, 232, 0.02) 100%
+  );
+  border-radius: inherit;
+  content: "";
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+
+/* Give outer-shell content more breathing room from its rounded frame. */
+.app-shell__history-shell,
+.app-shell__overview-shell,
+.app-shell__model-shell {
+  padding: clamp(1.35rem, 2.5vw, 1.8rem);
+}
+
+/* Keep header content comfortably inside the shell edges. */
+.app-shell__history-shell .storm-history__header {
+  padding: 0.1rem 0.15rem 0.55rem;
+}
+
+/* Prevent the Refresh control from visually touching the upper-right frame. */
+.app-shell__history-shell .storm-history__refresh {
+  margin-top: 0.1rem;
+  margin-right: 0.15rem;
+}
+
+/* Restore the shell's compact geometry. */
+.app-shell__history-shell,
+.app-shell__overview-shell,
+.app-shell__model-shell {
+  padding: clamp(0.9rem, 2vw, 1.25rem);
+}
+
+/* Add only a small, controlled inset to the Storm History header. */
+.app-shell__history-shell .storm-history__header {
+  padding: 0.15rem 0.25rem 0.35rem;
+}
+
+/* Keep Refresh slightly away from the frame without shifting the layout. */
+.app-shell__history-shell .storm-history__refresh {
+  margin-top: 0.1rem;
+  margin-right: 0.2rem;
 }

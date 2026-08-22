@@ -5,7 +5,7 @@ import json
 import platform
 import re
 from dataclasses import asdict, dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from importlib.metadata import PackageNotFoundError, version
 from itertools import pairwise
 from pathlib import Path
@@ -715,7 +715,7 @@ def train() -> None:
         "preprocessing_version": "phase3-conservative-whitespace-v1",
         "model_type": selected_name,
         "hyperparameters": results[0].best_params,
-        "training_date_utc": datetime.now(timezone.utc).isoformat(),
+        "training_date_utc": datetime.now(UTC).isoformat(),
         "random_state": RANDOM_STATE,
         "cv": {
             "strategy": "StratifiedGroupKFold",

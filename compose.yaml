@@ -1,0 +1,96 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: sentinelai-postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?POSTGRES_DB is required}
+      POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER is required}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+
+    volumes:
+      - sentinelai-postgres-data:/var/lib/postgresql/data
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U sentinelai -d sentinelai"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+    networks:
+      - sentinelai
+
+  api:
+    image: localhost/sentinelai_api:latest
+    build:
+      context: .
+      dockerfile: Containerfile.api
+
+    container_name: sentinelai-api
+    restart: unless-stopped
+
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?DATABASE_URL is required}
+      APP_ENV: ${APP_ENV:-development}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-}
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=3)\""
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+    # Intentionally NOT exposed on the host.
+    # Access the API through nginx at /api/*
+    networks:
+      - sentinelai
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Containerfile.frontend
+
+    container_name: sentinelai-frontend
+    restart: unless-stopped
+
+    depends_on:
+      - api
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget --spider -q http://127.0.0.1/ || exit 1"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+    ports:
+      - "8080:80"
+
+    networks:
+      - sentinelai
+
+networks:
+  sentinelai:
+    driver: bridge
+
+volumes:
+  sentinelai-postgres-data:

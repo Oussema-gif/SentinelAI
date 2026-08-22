@@ -1,0 +1,8 @@
+FROM postgres:16-alpine
+
+RUN apk add --no-cache gzip findutils
+
+COPY entrypoint.sh /usr/local/bin/backup-entrypoint.sh
+RUN chmod +x /usr/local/bin/backup-entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/backup-entrypoint.sh"]
