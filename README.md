@@ -1,8 +1,38 @@
 # SentinelAI
 
-SentinelAI is a full-stack SMS threat-analysis application that classifies SMS-style messages as **spam** or **ham**, explains the model’s most influential terms, stores prediction metadata in PostgreSQL, and presents results in a React dashboard.
+**SMS threat analysis, powered by a transparent, explainable machine learning pipeline.**
+
+SentinelAI is a full-stack SMS threat-analysis application that classifies SMS-style messages as **spam** or **ham**, explains the model's most influential terms, stores prediction metadata in PostgreSQL, and presents results in a React dashboard.
+
+![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)
+![Python](https://img.shields.io/badge/python-3.14-blue.svg)
+![TypeScript](https://img.shields.io/badge/frontend-React%20%2B%20TypeScript-informational.svg)
+![FastAPI](https://img.shields.io/badge/backend-FastAPI-009688.svg)
 
 > **Important:** SentinelAI is a demonstration and decision-support project. It should not be the sole control used to block messages, make security decisions, or assess user trust.
+
+## Demo
+
+A short demo video is available here:
+
+- [SentinelAI demo (Google Drive)](https://drive.google.com/file/d/1EJf-1N_AWuypDv36tUD6wxM5NBLN9GGl/view?usp=sharing)
+
+## Table of contents
+
+- [Features](#features)
+- [Architecture](#architecture)
+- [Repository layout](#repository-layout)
+- [Requirements](#requirements)
+- [Quick start](#quick-start)
+- [API](#api)
+- [Model semantics](#model-semantics)
+- [Data and artifacts](#data-and-artifacts)
+- [Database migrations](#database-migrations)
+- [Verification](#verification)
+- [Development guidelines](#development-guidelines)
+- [Troubleshooting](#troubleshooting)
+- [Security](#security)
+- [License](#license)
 
 ## Features
 
@@ -37,19 +67,19 @@ The frontend is exposed on port `8080`. Browser API traffic is proxied through n
 
 ## Repository layout
 
-```text
-api/                    FastAPI application, PostgreSQL models, Alembic, API tests
-frontend/               React + TypeScript + Vite interface and nginx configuration
-ml/                     Dataset tools, training, inference, explanations, ML tests
-docs/                   Data card, EDA, model evaluation, production guidance
-ops/                    Operational guidance and maintenance assets
-scripts/                Supported verification and smoke-test scripts
-.github/                CI workflows, issue templates, pull-request template
-compose.yaml            Local Podman Compose stack
-compose.production.yaml Production Compose configuration
-Containerfile.api       API image build
-Containerfile.frontend  Frontend/nginx image build
-```
+| Path | Description |
+|---|---|
+| `api/` | FastAPI application, PostgreSQL models, Alembic, API tests |
+| `frontend/` | React + TypeScript + Vite interface and nginx configuration |
+| `ml/` | Dataset tools, training, inference, explanations, ML tests |
+| `docs/` | Data card, EDA, model evaluation, production guidance |
+| `ops/` | Operational guidance and maintenance assets |
+| `scripts/` | Supported verification and smoke-test scripts |
+| `.github/` | CI workflows, issue templates, pull-request template |
+| `compose.yaml` | Local Podman Compose stack |
+| `compose.production.yaml` | Production Compose configuration |
+| `Containerfile.api` | API image build |
+| `Containerfile.frontend` | Frontend/nginx image build |
 
 ## Requirements
 
@@ -58,14 +88,14 @@ Install the following local tools:
 - Podman and `podman-compose`
 - Python 3.14-compatible runtime
 - Node.js and npm
-- PostgreSQL client tools, optional but recommended
+- PostgreSQL client tools (optional but recommended)
 - `curl`, Git, and Bash
 
 The documented workflow targets Fedora or another Linux environment.
 
 ## Quick start
 
-### Configure local environment
+### 1. Configure local environment
 
 Copy the example environment file and update values as appropriate:
 
@@ -84,9 +114,9 @@ APP_ENV=development
 CORS_ALLOWED_ORIGINS=
 ```
 
-Do not commit `.env`, `.env.local`, production credentials, API keys, or database backups.
+> Do not commit `.env`, `.env.local`, production credentials, API keys, or database backups.
 
-### Start the stack
+### 2. Start the stack
 
 ```bash
 podman-compose --env-file .env.local up -d --build
@@ -98,13 +128,13 @@ Check the service state:
 podman-compose --env-file .env.local ps
 ```
 
-Open SentinelAI:
+### 3. Open SentinelAI
 
 ```text
 http://127.0.0.1:8080
 ```
 
-### Stop the stack
+### 4. Stop the stack
 
 ```bash
 podman-compose --env-file .env.local down
@@ -179,7 +209,7 @@ SentinelAI uses a Linear SVM trained on the UCI SMS Spam Collection.
 | Holdout F1 | 0.954704 |
 | Holdout PR-AUC | 0.968298 |
 
-The model’s `decision_score` is not a calibrated probability. SentinelAI deliberately returns `confidence: null` and identifies the score as `decision_score_not_probability` rather than exposing misleading confidence values.
+The model's `decision_score` is not a calibrated probability. SentinelAI deliberately returns `confidence: null` and identifies the score as `decision_score_not_probability` rather than exposing misleading confidence values.
 
 See:
 
@@ -217,7 +247,7 @@ The default local model path is:
 ml/models/sentinelai-sms-v1.0.0.joblib
 ```
 
-For deployments, distribute model artifacts through a release, artifact registry, object store, or reproducible training pipeline—not ordinary Git commits.
+For deployments, distribute model artifacts through a release, artifact registry, object store, or reproducible training pipeline — not ordinary Git commits.
 
 ## Database migrations
 
@@ -289,14 +319,18 @@ The smoke test verifies:
 
 ## Troubleshooting
 
-### Containers are not running
+<details>
+<summary><strong>Containers are not running</strong></summary>
 
 ```bash
 podman-compose --env-file .env.local up -d
 podman-compose --env-file .env.local ps
 ```
 
-### Inspect logs
+</details>
+
+<details>
+<summary><strong>Inspect logs</strong></summary>
 
 ```bash
 podman-compose --env-file .env.local logs --tail=150 postgres
@@ -304,7 +338,10 @@ podman-compose --env-file .env.local logs --tail=150 api
 podman-compose --env-file .env.local logs --tail=150 frontend
 ```
 
-### API tests cannot connect
+</details>
+
+<details>
+<summary><strong>API tests cannot connect</strong></summary>
 
 Verify the test database and its credentials:
 
@@ -314,7 +351,10 @@ podman exec -it sentinelai-postgres \
   -c '\l'
 ```
 
-### Frontend changes are missing
+</details>
+
+<details>
+<summary><strong>Frontend changes are missing</strong></summary>
 
 ```bash
 npm --prefix frontend run build
@@ -328,6 +368,8 @@ Then hard-refresh the browser:
 ```text
 Ctrl+Shift+R
 ```
+
+</details>
 
 ## Security
 
