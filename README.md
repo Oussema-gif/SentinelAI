@@ -1,28 +1,19 @@
 # SentinelAI
 
-SentinelAI is a containerized SMS threat-analysis application. It classifies messages as spam or ham, explains influential terms from a trained Linear SVM, persists prediction metadata in PostgreSQL, and presents the results in a weather-radar-inspired React interface.
+SentinelAI is a full-stack SMS threat-analysis application that classifies SMS-style messages as **spam** or **ham**, explains the model’s most influential terms, stores prediction metadata in PostgreSQL, and presents results in a React dashboard.
 
-The application is designed as a local-first project with a production-oriented container layout:
-
-- React + TypeScript + Vite frontend.
-- FastAPI backend.
-- PostgreSQL persistence.
-- Scikit-learn Linear SVM model.
-- Alembic migrations.
-- Podman Compose deployment.
-- Automated ML, API, and frontend verification.
+> **Important:** SentinelAI is a demonstration and decision-support project. It should not be the sole control used to block messages, make security decisions, or assess user trust.
 
 ## Features
 
-- Analyze SMS-style text for spam or ham classification.
-- Preserve honest model semantics: decision score is shown separately from probability; no false probability is exposed.
-- Show influential TF-IDF/Linear-SVM terms with spam or ham direction.
-- Persist predictions and model metadata in PostgreSQL.
-- Provide prediction history and usage analytics.
-- Present threat severity through a radar interface, forecast card, regional overview, model panel, and clickable Storm History timeline.
-- Use a shared severity color scale across the interface.
-- Support reduced-motion preferences for atmospheric UI effects.
-- Run the frontend behind nginx and expose the stack at port `8080`.
+- Classifies SMS-style text as `spam` or `ham`
+- Uses a trained scikit-learn **Linear SVM**
+- Displays a signed model decision score without falsely presenting it as a probability
+- Explains predictions through influential TF-IDF / Linear SVM terms
+- Persists predictions, model metadata, and threat-investigation records in PostgreSQL
+- Provides prediction history, usage analytics, model analytics, and threat timelines
+- Uses FastAPI, React, TypeScript, Vite, PostgreSQL, Alembic, nginx, and Podman Compose
+- Includes automated ML, API, database, and frontend verification
 
 ## Architecture
 
@@ -37,44 +28,52 @@ nginx frontend container
   v
 FastAPI API container
   |
-  +--> Scikit-learn model artifact
+  +--> scikit-learn model artifact
   |
-  +--> PostgreSQL container
+  +--> PostgreSQL database
 ```
 
-The frontend is served by nginx. The API is intentionally not exposed directly on the host; nginx proxies browser API requests through `/api`.
+The frontend is exposed on port `8080`. Browser API traffic is proxied through nginx at `/api`; the API is not intended to be directly exposed by the Compose stack.
 
-## Project layout
+## Repository layout
 
 ```text
-api/                    FastAPI application, database models, migrations, tests
-frontend/               React/Vite interface and nginx configuration
-ml/                     Training pipeline, model artifact, dataset utilities, ML tests
-docs/                   Data card, EDA report, model comparison, production checklist
-ops/                    Operational scripts and log guidance
-scripts/                Full verification and live smoke-test scripts
+api/                    FastAPI application, PostgreSQL models, Alembic, API tests
+frontend/               React + TypeScript + Vite interface and nginx configuration
+ml/                     Dataset tools, training, inference, explanations, ML tests
+docs/                   Data card, EDA, model evaluation, production guidance
+ops/                    Operational guidance and maintenance assets
+scripts/                Supported verification and smoke-test scripts
+.github/                CI workflows, issue templates, pull-request template
 compose.yaml            Local Podman Compose stack
-compose.production.yaml Production Compose override/configuration
+compose.production.yaml Production Compose configuration
 Containerfile.api       API image build
 Containerfile.frontend  Frontend/nginx image build
 ```
 
-## Prerequisites
+## Requirements
 
-Install:
+Install the following local tools:
 
-- Podman and `podman-compose`.
-- Python 3.14-compatible environments for `api/` and `ml/`.
-- Node.js and npm for the frontend.
-- `curl`, Git, and Bash.
+- Podman and `podman-compose`
+- Python 3.14-compatible runtime
+- Node.js and npm
+- PostgreSQL client tools, optional but recommended
+- `curl`, Git, and Bash
 
-The documented local workflow assumes Fedora/Linux.
+The documented workflow targets Fedora or another Linux environment.
 
 ## Quick start
 
-### 1. Configure environment
+### Configure local environment
 
-Create or update `.env.local`:
+Copy the example environment file and update values as appropriate:
+
+```bash
+cp .env.example .env.local
+```
+
+Example local container configuration:
 
 ```dotenv
 POSTGRES_DB=sentinelai
@@ -85,75 +84,57 @@ APP_ENV=development
 CORS_ALLOWED_ORIGINS=
 ```
 
-For host-side development commands, `.env` can use the host address:
+Do not commit `.env`, `.env.local`, production credentials, API keys, or database backups.
 
-```dotenv
-DATABASE_URL=postgresql+psycopg://sentinelai:sentinelai_dev@127.0.0.1:5432/sentinelai
-MODEL_ARTIFACT_PATH=ml/models/sentinelai-sms-v1.0.0.joblib
-MODEL_VERSION=sentinelai-sms-v1.0.0
-```
-
-Do not commit real production credentials.
-
-### 2. Start the stack
+### Start the stack
 
 ```bash
 podman-compose --env-file .env.local up -d --build
 ```
 
-Check service status:
+Check the service state:
 
 ```bash
 podman-compose --env-file .env.local ps
 ```
 
-Open the application:
+Open SentinelAI:
 
 ```text
 http://127.0.0.1:8080
 ```
 
-### 3. Stop the stack
+### Stop the stack
 
 ```bash
 podman-compose --env-file .env.local down
 ```
 
-Stopping containers does not remove the named PostgreSQL volume.
+Stopping the stack does not remove the named PostgreSQL data volume.
 
-## API overview
+## API
 
-All browser API requests are available through:
+All browser-facing endpoints are available through nginx:
 
 ```text
 http://127.0.0.1:8080/api
 ```
 
-Core endpoints include:
-
-| Method | Endpoint | Purpose |
+| Method | Endpoint | Description |
 |---|---|---|
-| GET | `/health` | Basic API health check |
-| GET | `/health/ready` | Readiness health check |
-| POST | `/predictions` | Analyze a message |
-| GET | `/predictions` | Paginated prediction history |
-| GET | `/model/info` | Active model metadata and evaluation metrics |
-| GET | `/analytics/model` | Model analytics |
-| GET | `/analytics/usage` | Prediction usage analytics |
-| POST | `/threat/analyze` | Create a threat investigation |
-| GET | `/threat/history` | Retrieve threat-investigation history |
-| GET | `/threat/overview` | Regional threat overview |
-| GET | `/threat/timeline` | Threat timeline data |
+| `GET` | `/health` | API health check |
+| `GET` | `/health/ready` | Readiness health check |
+| `POST` | `/predictions` | Analyze an SMS message |
+| `GET` | `/predictions` | Retrieve paginated prediction history |
+| `GET` | `/model/info` | Get active model metadata and evaluation metrics |
+| `GET` | `/analytics/model` | Get model analytics |
+| `GET` | `/analytics/usage` | Get prediction usage analytics |
+| `POST` | `/threat/analyze` | Create a threat investigation |
+| `GET` | `/threat/history` | Retrieve prior threat investigations |
+| `GET` | `/threat/overview` | Retrieve regional threat overview |
+| `GET` | `/threat/timeline` | Retrieve threat timeline data |
 
-Use the OpenAPI UI when the API is directly reachable in a development environment:
-
-```text
-http://127.0.0.1:8000/docs
-```
-
-In the container stack, the API is intended to be accessed through nginx at `/api`.
-
-## Example prediction
+### Example prediction
 
 ```bash
 curl -X POST http://127.0.0.1:8080/api/predictions \
@@ -164,24 +145,28 @@ curl -X POST http://127.0.0.1:8080/api/predictions \
   }'
 ```
 
-The response includes:
+Example response shape:
 
-- `label`: `spam` or `ham`.
-- `decision_score`: signed Linear SVM decision score.
-- `confidence`: `null` because the selected model has no approved calibrated probability.
-- `confidence_type`: explains the score semantics.
-- `influential_terms`: positive spam and negative ham feature contributions.
-- `model_version`.
-
-## Model
-
-SentinelAI uses model artifact:
-
-```text
-ml/models/sentinelai-sms-v1.0.0.joblib
+```json
+{
+  "label": "spam",
+  "confidence": null,
+  "confidence_type": "decision_score_not_probability",
+  "decision_score": 0.75499697,
+  "influential_terms": [
+    {
+      "term": "won",
+      "contribution": 0.42570204,
+      "direction": "spam"
+    }
+  ],
+  "model_version": "sentinelai-sms-v1.0.0"
+}
 ```
 
-Current model characteristics:
+## Model semantics
+
+SentinelAI uses a Linear SVM trained on the UCI SMS Spam Collection.
 
 | Property | Value |
 |---|---|
@@ -194,22 +179,53 @@ Current model characteristics:
 | Holdout F1 | 0.954704 |
 | Holdout PR-AUC | 0.968298 |
 
-The model does not provide an approved calibrated probability. SentinelAI therefore exposes a decision score rather than presenting an uncalibrated value as user-facing confidence.
+The model’s `decision_score` is not a calibrated probability. SentinelAI deliberately returns `confidence: null` and identifies the score as `decision_score_not_probability` rather than exposing misleading confidence values.
 
 See:
 
-- `docs/data_card.md`
-- `docs/eda_report.md`
-- `docs/model_comparison.md`
+- [Data Card](docs/data_card.md)
+- [EDA Report](docs/eda_report.md)
+- [Model Comparison](docs/model_comparison.md)
 
-## Database and migrations
+## Data and artifacts
 
-PostgreSQL stores model metadata, predictions, and threat-investigation records.
+Raw datasets, generated reports, local model artifacts, database exports, and runtime caches should not be committed to Git.
 
-Run migrations against a configured database:
+Download the source dataset locally:
+
+```bash
+source ml/.venv/bin/activate
+
+PYTHONPATH="$PWD/ml/src" python -m sentinelai_ml.data.download
+
+deactivate
+```
+
+Train a local artifact:
+
+```bash
+source ml/.venv/bin/activate
+
+PYTHONPATH="$PWD/ml/src" python -m sentinelai_ml.train
+
+deactivate
+```
+
+The default local model path is:
+
+```text
+ml/models/sentinelai-sms-v1.0.0.joblib
+```
+
+For deployments, distribute model artifacts through a release, artifact registry, object store, or reproducible training pipeline—not ordinary Git commits.
+
+## Database migrations
+
+Apply migrations against a configured host database:
 
 ```bash
 source api/.venv/bin/activate
+
 export PYTHONPATH="$PWD:$PWD/ml/src"
 export DATABASE_URL="postgresql+psycopg://sentinelai:sentinelai_dev@127.0.0.1:5432/sentinelai"
 
@@ -218,7 +234,13 @@ alembic -c api/alembic.ini upgrade head
 deactivate
 ```
 
-For tests, use a separate database named `sentinelai_test`:
+The API test suite uses a separate database by default:
+
+```text
+sentinelai_test
+```
+
+Create it if needed:
 
 ```bash
 podman exec -it sentinelai-postgres \
@@ -226,28 +248,22 @@ podman exec -it sentinelai-postgres \
   -c "CREATE DATABASE sentinelai_test;"
 ```
 
-The test script defaults to:
+## Verification
 
-```text
-postgresql+psycopg://sentinelai:sentinelai_dev@127.0.0.1:5432/sentinelai_test
-```
-
-## Testing and verification
-
-Run the complete verification suite:
+Run all supported checks:
 
 ```bash
 ./scripts/test-all.sh
 ```
 
-It runs:
+This runs:
 
-1. ML linting, formatting, and tests.
-2. API linting, formatting, migrations, and tests.
-3. Frontend TypeScript validation and production build.
-4. Git status output.
+1. ML linting, formatting, and tests
+2. API linting, formatting, migrations, and tests
+3. Frontend TypeScript validation and production build
+4. Repository status output
 
-Run the live smoke test after the stack is running:
+Run the live smoke test after starting the container stack:
 
 ```bash
 ./scripts/smoke-test.sh
@@ -255,50 +271,25 @@ Run the live smoke test after the stack is running:
 
 The smoke test verifies:
 
-- Health endpoint.
-- Model metadata.
-- Spam prediction.
-- Ham prediction.
-- Prediction history.
-- Usage analytics.
+- API health
+- Active model metadata
+- Spam prediction
+- Ham prediction
+- Prediction history
+- Usage analytics
 
-## Frontend notes
+## Development guidelines
 
-The frontend uses a weather-radar visual system:
-
-- Risk levels share one severity color scale.
-- Storm History cards use matching labels, dots, borders, and glow.
-- Clicking a Storm History item restores that investigation in the main analysis view.
-- Decorative atmosphere is behind interactive content.
-- `prefers-reduced-motion: reduce` disables cloud, star, and lightning animation.
-
-Primary frontend entry points:
-
-```text
-frontend/src/App.tsx
-frontend/src/App.css
-frontend/src/components/
-frontend/src/api/
-```
-
-## Production notes
-
-Use `.env.production.example` as the template for a production environment.
-
-Production requirements include:
-
-- A long random `MESSAGE_FINGERPRINT_SECRET`.
-- A real PostgreSQL URL.
-- Explicit `CORS_ALLOWED_ORIGINS`.
-- HTTPS terminated by the deployment environment or reverse proxy.
-- A persistent PostgreSQL backup and restore plan.
-- No raw message persistence for anonymous/public deployments when `PERSIST_RAW_MESSAGE_TEXT=false`.
-
-See `docs/production-checklist.md` for the production checklist.
+- Keep secrets and local configuration out of Git.
+- Do not commit `.env` files, raw data, generated model artifacts, notebook checkpoints, build output, dependency directories, or caches.
+- Keep feature preparation inside the shared scikit-learn pipeline.
+- Preserve duplicate-aware train/test separation in model evaluation.
+- Do not label an uncalibrated decision score as a probability.
+- Add or update tests when changing model, API, persistence, or frontend behavior.
 
 ## Troubleshooting
 
-### Containers are stopped
+### Containers are not running
 
 ```bash
 podman-compose --env-file .env.local up -d
@@ -313,24 +304,23 @@ podman-compose --env-file .env.local logs --tail=150 api
 podman-compose --env-file .env.local logs --tail=150 frontend
 ```
 
-### API tests cannot connect to PostgreSQL
+### API tests cannot connect
 
-Confirm the database exists and credentials match:
+Verify the test database and its credentials:
 
 ```bash
 podman exec -it sentinelai-postgres \
-  psql -U sentinelai -d postgres -c '\l'
+  psql -U sentinelai -d postgres \
+  -c '\l'
 ```
 
-The API test database should be `sentinelai_test`.
-
-### Frontend does not show latest changes
-
-Rebuild and recreate the frontend container:
+### Frontend changes are missing
 
 ```bash
 npm --prefix frontend run build
-podman-compose --env-file .env.local up -d --build --force-recreate frontend
+
+podman-compose --env-file .env.local \
+  up -d --build --force-recreate frontend
 ```
 
 Then hard-refresh the browser:
@@ -339,28 +329,12 @@ Then hard-refresh the browser:
 Ctrl+Shift+R
 ```
 
-## Useful commands
+## Security
 
-```bash
-# Check repository state
-git status
+Do not submit sensitive, confidential, or real production message content to public SentinelAI deployments. Configure `PERSIST_RAW_MESSAGE_TEXT=false` for anonymous or public-facing deployments.
 
-# Start containers
-podman-compose --env-file .env.local up -d
-
-# Stop containers
-podman-compose --env-file .env.local down
-
-# Run full verification
-./scripts/test-all.sh
-
-# Run live API smoke test
-./scripts/smoke-test.sh
-
-# Inspect recent project state
-./scripts/session_snapshot.sh
-```
+See the production checklist in [`docs/production-checklist.md`](docs/production-checklist.md).
 
 ## License
 
-No license has been declared yet. Add a `LICENSE` file before distributing the project publicly.
+This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
